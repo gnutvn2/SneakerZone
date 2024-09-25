@@ -1,0 +1,95 @@
+/* Toàn bộ sidebar */
+.sidebar {
+  width: 250px;
+  background-color: #34495e;
+  height: 100vh;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo */
+.logo {
+  text-align: center;
+  margin-bottom: 10px; /* Khoảng cách giữa logo và các mục menu */
+}
+
+.logo img {
+  max-width: 80%; /* Giảm kích thước logo */
+  height: auto; /* Để tự động điều chỉnh chiều cao */
+  border-radius: 5px; /* Tùy chọn: góc bo cho logo */
+}
+
+/* Các mục điều hướng chính */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar .nav-item {
+  margin-bottom: 8px; /* Giảm khoảng cách giữa các mục */
+}
+
+.sidebar .nav-link {
+  color: #ecf0f1;
+  text-decoration: none;
+  padding: 8px 12px; /* Giảm padding */
+  display: flex; /* Sử dụng flexbox để căn chỉnh icon và text */
+  align-items: center; /* Căn giữa icon và chữ */
+  font-size: 14px; /* Giảm kích thước chữ */
+  border-radius: 4px;
+  transition: background-color 0.3s ease, padding-left 0.3s ease;
+}
+
+.sidebar .nav-link i {
+  margin-right: 3px; /* Khoảng cách giữa icon và text */
+}
+
+.sidebar .nav-link:hover {
+  background-color: #3f8edc;
+  padding-left: 18px; /* Tăng thêm khi hover để lệch sang phải một chút */
+}
+
+/* Submenu */
+.sidebar .submenu {
+  display: none;
+  padding-left: 10px; /* Lệch sang phải thêm cho submenu */
+}
+
+.sidebar .has-submenu.active .submenu {
+  display: block;
+}
+
+.sidebar .submenu .nav-link {
+  font-size: 14px; /* Giảm kích thước chữ cho submenu */
+  padding: 6px 25px; /* Giảm padding-left để lệch sang phải thêm */
+}
+
+.sidebar .submenu .nav-link:hover {
+  padding-left: 30px; /* Thêm hiệu ứng khi hover submenu */
+}
+
+/* Hiệu ứng khi submenu được active */
+.sidebar .has-submenu.active > .nav-link {
+  padding-left: 20px; /* Giữ kích thước nhất quán */
+}
+
+/* Sidebar trên thiết bị di động */
+@media (max-width: 768px) {
+  .sidebar {
+      width: 200px;
+      padding: 15px;
+  }
+
+  .sidebar .nav-link {
+      font-size: 14px; /* Font nhỏ hơn cho thiết bị di động */
+  }
+
+  .sidebar .submenu .nav-link {
+      font-size: 12px; /* Font nhỏ hơn cho submenu trên thiết bị di động */
+  }
+}

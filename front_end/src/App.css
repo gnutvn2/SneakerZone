@@ -1,0 +1,39 @@
+.app-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    background-color: #ecf0f1; /* Màu nền chính */
+  }
+  
+  /* Sidebar container */
+  .app-sidebar {
+    width: 250px;
+    background-color: #34495e; /* Cùng màu với sidebar */
+    height: 100%;
+    position: fixed; /* Giữ sidebar cố định */
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Đảm bảo sidebar luôn ở trên */
+    overflow-y: auto; /*Cho phép cuộn nếu nội dung sidebar quá dài*/
+  }
+  
+  /* Phần nội dung chính (bên phải sidebar) */
+  .app-content {
+    margin-left: 250px; /* Căn lề để không đè lên sidebar */
+    padding: 20px;
+    width: calc(100% - 250px); /* Điều chỉnh độ rộng cho phù hợp với sidebar */
+    background-color: #ecf0f1; /* Màu nền cho phần nội dung */
+  }
+  
+  /* Tùy chọn: Hiển thị sidebar khi trên thiết bị nhỏ hơn */
+  @media (max-width: 768px) {
+    .app-sidebar {
+      width: 200px; /* Sidebar nhỏ hơn trên thiết bị nhỏ */
+    }
+    
+    .app-content {
+      margin-left: 200px; /* Điều chỉnh lề cho phù hợp với sidebar nhỏ */
+      width: calc(100% - 200px);
+    }
+  }
+  
