@@ -65,7 +65,7 @@ create table san_pham(
 	ma_san_pham varchar(30) unique not null,
 	ten_san_pham nvarchar(100) not null,
 	mo_ta text,
-	trang_thai bit not null,
+	trang_thai bit default 1 not null,
 	ngay_tao date not null,
 	--Foreign key
 	thuong_hieu_id int not null foreign key (thuong_hieu_id) references thuong_hieu(id), 

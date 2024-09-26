@@ -27,9 +27,10 @@ public class SanPhamServiceImpl implements SanPhamService {
     DanhMucRepository danhMucRepository;
 
     @Override
-    public Page<SanPham> getSanPham(Pageable pageable) {
-        return sanPhamRepository.findAll(pageable);
+    public Page<SanPham> getSanPham(Boolean trangThai, Pageable pageable) {
+        return sanPhamRepository.hienThi(trangThai, pageable);
     }
+
 
     @Override
     public SanPham createSanPham(SanPhamRequest request) {
@@ -74,11 +75,22 @@ public class SanPhamServiceImpl implements SanPhamService {
         return shoeMapper.toSanPhamResponse(sanPhamRepository.save(sanPham));
     }
 
+
     @Override
-    public void deleteSanPham(Integer id) {
-        if (!sanPhamRepository.existsById(id)) {
-            throw new RuntimeException("Không tìm thấy id sản phẩm muốn xóa!");
+    public Boolean updateTrangThai(Integer id) {
+        SanPham sanPham = sanPhamRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại"));
+        if (id != null) {
+            if (sanPham.getTrangThai().equals(true)) {
+                sanPham.setTrangThai(false);
+            } else {
+                sanPham.setTrangThai(true);
+            }
+            sanPhamRepository.save(sanPham);
+            return true;
         }
-        sanPhamRepository.deleteById(id);
+        return false;
     }
+
+
 }

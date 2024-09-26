@@ -45,7 +45,7 @@ const Sidebar = () => {
           <Link className='nav-link' to="#"><i className="bi bi-box-seam"></i>Quản lý sản phẩm</Link>
           <ul className='submenu'>
             <li className='nav-item'>
-              <Link className='nav-link' to="/SanPham"><i className="bi bi-box"></i>Sản phẩm</Link>
+              <Link className='nav-link' to="/san-pham"><i className="bi bi-box"></i>Sản phẩm</Link>
             </li>
             <li className='nav-item'>
               <Link className='nav-link' to="/danh-muc"><i className="bi bi-tag"></i>Danh mục</Link>

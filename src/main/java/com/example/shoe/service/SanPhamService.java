@@ -7,9 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface SanPhamService {
-    Page<SanPham> getSanPham(Pageable pageable);
+    Page<SanPham> getSanPham(Boolean trangThai, Pageable pageable);
     SanPham createSanPham(SanPhamRequest request);
     SanPhamResponse getSanPhamId(Integer id);
     SanPhamResponse updateSanPham(Integer id, SanPhamRequest request);
-    void deleteSanPham(Integer id);
+    Boolean updateTrangThai(Integer id);
 }

@@ -5,6 +5,7 @@ import ListDanhMuc from './component/DanhMuc/ListDanhMuc';
 import DanhMucComponent from './component/DanhMuc/DanhMucComponent';
 import ListThuongHieuComponent from './component/ThuongHieu/ListThuongHieuComponent';
 import ThuongHieuComponent from './component/ThuongHieu/ThuongHieuComponent'
+import ListSanPhamComponent from './component/SanPham/ListSanPhamComponent';
 
 function App() {
   return (
@@ -23,8 +24,11 @@ function App() {
 
             {/*Thương hiệu */}
             <Route path='/thuong-hieu' element={<ListThuongHieuComponent />} />
-            <Route path='/add-thuong-hieu' element={<ThuongHieuComponent/>}></Route>
-            <Route path='/update-thuong-hieu/:id' element={<ThuongHieuComponent/>}></Route>
+            <Route path='/add-thuong-hieu' element={<ThuongHieuComponent />}></Route>
+            <Route path='/update-thuong-hieu/:id' element={<ThuongHieuComponent />}></Route>
+
+            {/*Sản phẩm */}
+            <Route path='/san-pham' element={<ListSanPhamComponent />}></Route>
           </Routes>
         </div>
       </div>

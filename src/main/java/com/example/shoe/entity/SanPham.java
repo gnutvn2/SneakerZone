@@ -23,6 +23,7 @@ public class SanPham {
     String tenSanPham;
     @Column(name = "mo_ta")
     String moTa;
+    @Temporal(TemporalType.DATE)//Lay ngay khong lay gio
     @Column(name = "ngay_tao")
     Date ngayTao;
     @Column(name = "trang_thai")
