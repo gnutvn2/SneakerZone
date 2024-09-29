@@ -6,6 +6,7 @@ import DanhMucComponent from './component/DanhMuc/DanhMucComponent';
 import ListThuongHieuComponent from './component/ThuongHieu/ListThuongHieuComponent';
 import ThuongHieuComponent from './component/ThuongHieu/ThuongHieuComponent'
 import ListSanPhamComponent from './component/SanPham/ListSanPhamComponent';
+import SanPhamComponent from './component/SanPham/SanPhamComponent';
 
 function App() {
   return (
@@ -29,6 +30,8 @@ function App() {
 
             {/*Sản phẩm */}
             <Route path='/san-pham' element={<ListSanPhamComponent />}></Route>
+            <Route path='/add-san-pham' element={<SanPhamComponent />} />
+            <Route path='/update-san-pham/:id' element={<SanPhamComponent />} />
           </Routes>
         </div>
       </div>

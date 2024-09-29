@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { listSanPham } from '../../service/SanPhamService';
+import { listSanPham, updateTrangThai } from '../../service/SanPhamService';
 import InactiveProductsModal from './InactiveProductsModal'; // Import modal
 
 const ListSanPhamComponent = () => {
@@ -13,9 +13,8 @@ const ListSanPhamComponent = () => {
     const itemsPerPage = 5;
 
     const getAllSanPham = () => {
-        listSanPham({ page: currentPage, size: itemsPerPage}, true) // Đang hoạt động
+        listSanPham({ page: currentPage, size: itemsPerPage }, true)
             .then((response) => {
-                console.log("Sp active:", response.data.content); // Log sản phẩm đang hoạt động
                 setSanPham(response.data.content);
                 setTotalPages(response.data.totalPages);
             }).catch((error) => {
@@ -23,30 +22,53 @@ const ListSanPhamComponent = () => {
             });
     };
 
+    function createSanPham() {
+        navigator("/add-san-pham");
+    }
+
+    function updateSanPham(id) {
+        navigator(`/update-san-pham/${id}`)
+    }
+
+    const handleUpdateTrangThai = (sanPhamId) => {
+        updateTrangThai(sanPhamId)
+            .then(() => {
+                getAllSanPham();
+            })
+            .catch((error) => {
+                console.log("Cập nhật trạng thái thất bại: ", error);
+            });
+    };
 
     const getInactiveProducts = () => {
-       
-        listSanPham({ page: currentPage, size: itemsPerPage}, false)
+        listSanPham({ page: currentPage, size: itemsPerPage }, false)
             .then((response) => {
-                console.log("Inactive products:", response.data.content); // Log dữ liệu API trả về
-                setInactiveProducts(response.data.content); // Lưu vào state
-                setModalOpen(true); // Mở modal sau khi nhận được dữ liệu
+                setInactiveProducts(response.data.content);
+                setModalOpen(true);
             }).catch((error) => {
                 console.log(error);
             });
     };
 
-
-
-
-
     const handleShowModal = () => {
-        getInactiveProducts(); // Gọi hàm để lấy sản phẩm không hoạt động và mở modal
+        getInactiveProducts();
     };
 
     const handleCloseModal = () => {
-        setModalOpen(false); // Đóng modal
+        setModalOpen(false);
         getAllSanPham(); // Refresh lại danh sách sản phẩm hoạt động
+    };
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages - 1) {
+            setCurrentPage(prevPage => prevPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 0) {
+            setCurrentPage(prevPage => prevPage - 1);
+        }
     };
 
     useEffect(() => {
@@ -60,7 +82,7 @@ const ListSanPhamComponent = () => {
                 <div className='card-body'>
                     <div className='d-flex justify-content-between mb-3'>
                         <div>
-                            <button className='btn btn-success me-2'>
+                            <button className='btn btn-success me-2' onClick={createSanPham}>
                                 <i className='bi bi-plus-circle'></i> Thêm
                             </button>
                             <button className='btn btn-info' onClick={handleShowModal}>
@@ -69,8 +91,8 @@ const ListSanPhamComponent = () => {
                         </div>
                     </div>
 
-                    <table className='table table-hover'>
-                        <thead>
+                    <table className='table table-hover text-center'>
+                        <thead >
                             <tr>
                                 <th>ID sản phẩm</th>
                                 <th>Mã sản phẩm</th>
@@ -83,29 +105,62 @@ const ListSanPhamComponent = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {sp.map(sanPham =>
-                                <tr key={sanPham.id}>
-                                    <td>{sanPham.id}</td>
-                                    <td>{sanPham.maSanPham}</td>
-                                    <td>{sanPham.tenSanPham}</td>
-                                    <td>{sanPham.danhMuc?.tenDanhMuc}</td>
-                                    <td>{sanPham.thuongHieu?.tenThuongHieu}</td>
-                                    <td>{sanPham.ngayTao}</td>
-                                    <td>{sanPham.trangThai ? 'Hoạt động' : 'Ngừng hoạt động'}</td>
-                                    <td>
-                                        <button className='btn btn-info'>
-                                            <i className="bi bi-pencil-square"></i>
-                                        </button>
+                            {sp.length > 0 ? (
+                                sp.map(sanPham =>
+                                    <tr key={sanPham.id}>
+                                        <td>{sanPham.id}</td>
+                                        <td>{sanPham.maSanPham}</td>
+                                        <td>{sanPham.tenSanPham}</td>
+                                        <td>{sanPham.danhMuc?.tenDanhMuc}</td>
+                                        <td>{sanPham.thuongHieu?.tenThuongHieu}</td>
+                                        <td>{sanPham.ngayTao}</td>
+                                        <td>{sanPham.trangThai ? 'Hoạt động' : 'Ngừng hoạt động'}</td>
+                                        <td>
                                         <button
-                                            className='btn btn-danger'
-                                            style={{ marginLeft: '10px' }}>
-                                            <i className='bi bi-trash'></i>
-                                        </button>
-                                    </td>
+                                                className='btn btn-danger'
+                                                onClick={() => handleUpdateTrangThai(sanPham.id)}
+                                            >
+                                                <i class="bi bi-arrow-repeat"></i>
+                                            </button>
+                                            <button 
+                                                className='btn btn-info'
+                                                style={{ marginLeft: '10px' }}
+                                                onClick={updateSanPham}
+                                            >
+                                                <i className="bi bi-pencil-square"></i>
+                                            </button>
+                                            <button
+                                                className='btn btn-success'
+                                                style={{ marginLeft: '10px' }}>
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                )
+                            ) : (
+                                <tr>
+                                    <td colSpan="8" className="text-center">Không có sản phẩm nào.</td>
                                 </tr>
                             )}
                         </tbody>
                     </table>
+
+                    {/* Nút phân trang */}
+                    <div className="d-flex justify-content-center my-3">
+                        <button
+                            className="btn btn-outline-primary me-2"
+                            disabled={currentPage === 0}
+                            onClick={handlePreviousPage}>
+                            Pre
+                        </button>
+                        <span className="align-self-center">Trang {currentPage + 1} / {totalPages}</span>
+                        <button
+                            className="btn btn-outline-primary ms-2"
+                            disabled={currentPage + 1 >= totalPages}
+                            onClick={handleNextPage}>
+                            Next
+                        </button>
+                    </div>
                 </div>
             </div>
 
