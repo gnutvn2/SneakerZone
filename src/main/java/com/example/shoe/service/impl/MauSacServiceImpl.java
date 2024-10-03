@@ -9,9 +9,9 @@ import com.example.shoe.service.MauSacService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -21,15 +21,12 @@ public class MauSacServiceImpl implements MauSacService {
     ShoeMapper shoeMapper;
 
     @Override
-    public List<MauSac> getMauSac() {
-        return mauSacRepository.findAll();
+    public Page<MauSac> getMauSac(Pageable pageable) {
+        return mauSacRepository.findAll(pageable);
     }
 
     @Override
     public MauSac createMauSac(MauSacRequest request) {
-        if (mauSacRepository.existsByTenMauSac(request.getTenMauSac())) {
-            throw new RuntimeException("Tên màu sắc này đã tồn tại. Vui lòng nhập tên màu khác!");
-        }
         MauSac mauSac = shoeMapper.toMauSac(request);
         return mauSacRepository.save(mauSac);
     }
@@ -55,5 +52,10 @@ public class MauSacServiceImpl implements MauSacService {
             throw new RuntimeException("Không tìm thấy id " + id + "màu sắc muốn xóa!");
         }
         mauSacRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<MauSac> searchMauSac(String keyword, Pageable pageable) {
+        return mauSacRepository.search(keyword, pageable);
     }
 }

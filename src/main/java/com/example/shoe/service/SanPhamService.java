@@ -12,4 +12,5 @@ public interface SanPhamService {
     SanPhamResponse getSanPhamId(Integer id);
     SanPhamResponse updateSanPham(Integer id, SanPhamRequest request);
     Boolean updateTrangThai(Integer id);
+    Page<SanPham> searchSanPham(String keyword, Pageable pageable);
 }

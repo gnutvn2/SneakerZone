@@ -10,7 +10,7 @@ const ListSanPhamComponent = () => {
     const navigator = useNavigate();
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
-    const itemsPerPage = 5;
+    const itemsPerPage = 8;
 
     const getAllSanPham = () => {
         listSanPham({ page: currentPage, size: itemsPerPage }, true)
@@ -26,9 +26,10 @@ const ListSanPhamComponent = () => {
         navigator("/add-san-pham");
     }
 
-    function updateSanPham(id) {
-        navigator(`/update-san-pham/${id}`)
-    }
+    const updateSanPham = (id) => {
+        navigator(`/update-san-pham/${id}`);
+    };
+
 
     const handleUpdateTrangThai = (sanPhamId) => {
         updateTrangThai(sanPhamId)
@@ -116,16 +117,16 @@ const ListSanPhamComponent = () => {
                                         <td>{sanPham.ngayTao}</td>
                                         <td>{sanPham.trangThai ? 'Hoạt động' : 'Ngừng hoạt động'}</td>
                                         <td>
-                                        <button
+                                            <button
                                                 className='btn btn-danger'
                                                 onClick={() => handleUpdateTrangThai(sanPham.id)}
                                             >
                                                 <i class="bi bi-arrow-repeat"></i>
                                             </button>
-                                            <button 
+                                            <button
                                                 className='btn btn-info'
                                                 style={{ marginLeft: '10px' }}
-                                                onClick={updateSanPham}
+                                                onClick={() => updateSanPham(sanPham.id)} // Thêm id vào đây
                                             >
                                                 <i className="bi bi-pencil-square"></i>
                                             </button>

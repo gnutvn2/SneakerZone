@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,8 @@ public class MauSacController {
     MauSacService mauSacService;
 
     @GetMapping("")
-    public ResponseEntity<?> getMauSac(){
-        return ResponseEntity.ok(mauSacService.getMauSac());
+    public ResponseEntity<?> getMauSac(Pageable pageable){
+        return ResponseEntity.ok(mauSacService.getMauSac(pageable));
     }
 
     @PostMapping("")
@@ -42,5 +43,10 @@ public class MauSacController {
     public ResponseEntity<?> deleteMauSac(@PathVariable("id") Integer id){
         mauSacService.deleteMauSac(id);
         return ResponseEntity.status(HttpStatus.OK).body("Xóa màu sắc có id " + id + "thành công!");
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchMauSac(@RequestParam(required = false) String keyword, Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(mauSacService.searchMauSac(keyword, pageable));
     }
 }

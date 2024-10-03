@@ -14,8 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/san-pham")
@@ -52,6 +50,11 @@ public class SanPhamController {
     @PutMapping("/status/{id}")
     public Boolean updateTrangThai(@PathVariable Integer id) {
        return sanPhamService.updateTrangThai(id);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> search(@RequestParam(required = false) String keyword, Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(sanPhamService.searchSanPham(keyword, pageable));
     }
 
 }

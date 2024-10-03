@@ -62,8 +62,8 @@ public class DanhMucServiceImpl implements DanhMucService {
     }
 
     @Override
-    public List<DanhMuc> searchDanhMuc(String keyword) {
-        return danhMucRepository.search(keyword);
+    public Page<DanhMuc> searchDanhMuc(String keyword, Pageable pageable) {
+        return danhMucRepository.search(keyword, pageable);
     }
 
 

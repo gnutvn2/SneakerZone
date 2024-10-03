@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,28 +20,33 @@ public class ChatLieuController {
     ChatLieuService chatLieuService;
 
     @GetMapping("")
-    public ResponseEntity<?> getChatLieu() {
-        return ResponseEntity.ok(chatLieuService.getChatLieu());
+    public ResponseEntity<?> getChatLieu(Pageable pageable) {
+        return ResponseEntity.ok(chatLieuService.getChatLieu(pageable));
     }
 
-   @PostMapping("")
-   public ResponseEntity<?> createChatLieu(@RequestBody @Valid ChatLieuRequest request){
+    @PostMapping("")
+    public ResponseEntity<?> createChatLieu(@RequestBody @Valid ChatLieuRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(chatLieuService.createChatLieu(request));
-   }
+    }
 
-   @GetMapping("/{id}")
-    public ResponseEntity<?> getChatLieuId(@PathVariable("id") Integer id){
-       return ResponseEntity.ok(chatLieuService.getChatLieuId(id));
-   }
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getChatLieuId(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(chatLieuService.getChatLieuId(id));
+    }
 
-   @PutMapping("{id}")
-    public ResponseEntity<?> updateChatLieu(@PathVariable("id") Integer id, @RequestBody @Valid ChatLieuRequest request){
+    @PutMapping("{id}")
+    public ResponseEntity<?> updateChatLieu(@PathVariable("id") Integer id, @RequestBody @Valid ChatLieuRequest request) {
         return ResponseEntity.ok(chatLieuService.updateChatLieu(id, request));
-   }
+    }
 
-   @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteChatLieu(@PathVariable("id") Integer id){
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deleteChatLieu(@PathVariable("id") Integer id) {
         chatLieuService.deleteChatLieu(id);
         return ResponseEntity.status(HttpStatus.OK).body("Xóa chất liệu thành công");
-   }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchChatLieu(@RequestParam(required = false) String keyword, Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(chatLieuService.searchChatLieu(keyword, pageable));
+    }
 }

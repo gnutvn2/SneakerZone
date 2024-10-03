@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,8 @@ public class DeGiayController {
     DeGiayService deGiayService;
 
     @GetMapping("")
-    public ResponseEntity<?> getDeGiay() {
-        return ResponseEntity.ok(deGiayService.getDeGiay());
+    public ResponseEntity<?> getDeGiay(Pageable pageable) {
+        return ResponseEntity.ok(deGiayService.getDeGiay(pageable));
     }
 
     @PostMapping("")
@@ -42,6 +43,11 @@ public class DeGiayController {
     public ResponseEntity<?> deleteDeGiay(@PathVariable("id") Integer id) {
         deGiayService.deleteDeGiay(id);
         return ResponseEntity.status(HttpStatus.OK).body("Xóa đế giày id: " + id + " thành công!");
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> searchDeGiay(@RequestParam(required = false) String keyword, Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(deGiayService.searchDeGiay(keyword, pageable));
     }
 }
 

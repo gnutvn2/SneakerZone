@@ -9,12 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -52,8 +49,8 @@ public class DanhMucController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> searchDanhMuc(@RequestParam(name = "keyword") String keyword){
-        List<DanhMuc> result = danhMucService.searchDanhMuc(keyword);
+    public ResponseEntity<?> searchDanhMuc(@RequestParam(required = false) String keyword, Pageable pageable){
+        Page<DanhMuc> result = danhMucService.searchDanhMuc(keyword, pageable);
         return ResponseEntity.ok(result);
     }
 }

@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,8 @@ public class DotGiamGiaController {
     DotGiamGiaService dotGiamGiaService;
 
     @GetMapping("")
-    public ResponseEntity<?> getDotGiamGia(){
-        return ResponseEntity.ok(dotGiamGiaService.getDotGiamGia());
+    public ResponseEntity<?> getDotGiamGia(Pageable pageable){
+        return ResponseEntity.ok(dotGiamGiaService.getDotGiamGia(pageable));
     }
 
     @PostMapping("")
@@ -42,5 +43,10 @@ public class DotGiamGiaController {
     public ResponseEntity<?> deleteDotGiamGia(@PathVariable("id") Integer id){
         dotGiamGiaService.deleteDotGiamGiamGia(id);
         return ResponseEntity.status(HttpStatus.OK).body("Xóa đợt giảm giá thành công!");
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> search(@RequestParam(required = false) String keyword, Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(dotGiamGiaService.searchDotGiamGia(keyword, pageable));
     }
 }

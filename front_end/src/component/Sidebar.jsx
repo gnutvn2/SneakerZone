@@ -53,6 +53,21 @@ const Sidebar = () => {
             <li className='nav-item'>
               <Link className='nav-link' to="/thuong-hieu"><i className="bi bi-award"></i>Thương hiệu</Link>
             </li>
+            <li className='nav-item'>
+              <Link className='nav-link' to="/mau-sac"><i class="bi bi-palette"></i>Màu sắc</Link>
+            </li>
+            <li className='nav-item'>
+              <Link className='nav-link' to="/chat-lieu"><i class="bi bi-grid"></i>Chất liệu</Link>
+            </li>
+            <li className='nav-item'>
+              <Link className='nav-link' to="/size"><i class="bi bi-arrows-fullscreen"></i>
+              Size</Link>
+            </li>
+            <li className='nav-item'>
+              <Link className='nav-link' to="/de-giay"><i class="bi bi-layers"></i>
+
+              Đế giày</Link>
+            </li>
           </ul>
         </li>
 

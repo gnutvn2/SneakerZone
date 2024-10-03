@@ -9,6 +9,8 @@ import com.example.shoe.service.ChatLieuService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,15 +24,12 @@ public class ChatLieuServiceImpl implements ChatLieuService {
 
 
     @Override
-    public List<ChatLieu> getChatLieu() {
-        return chatLieuRepository.findAll();
+    public Page<ChatLieu> getChatLieu(Pageable pageable) {
+        return chatLieuRepository.findAll(pageable);
     }
 
     @Override
     public ChatLieu createChatLieu(ChatLieuRequest request) {
-        if (chatLieuRepository.existsByTenChatLieu(request.getTenChatLieu())) {
-            throw new RuntimeException("Chất liệu đã tồn tại. Vui lòng nhập chất liệu mới!");
-        }
         ChatLieu chatLieu = shoeMapper.toChatLieu(request);
         return chatLieuRepository.save(chatLieu);
     }
@@ -38,14 +37,14 @@ public class ChatLieuServiceImpl implements ChatLieuService {
     @Override
     public ChatLieuResponse getChatLieuId(Integer id) {
         ChatLieu chatLieu = chatLieuRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Không tìm thấy chất liệu"));
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy chất liệu"));
         return shoeMapper.toChatLieuResponse(chatLieu);
     }
 
     @Override
     public ChatLieuResponse updateChatLieu(Integer id, ChatLieuRequest request) {
         ChatLieu chatLieu = chatLieuRepository.findById(id)
-                        .orElseThrow(()-> new RuntimeException("Không tìm thấy chất liệu"));
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy chất liệu"));
         shoeMapper.toUpdateChatLieu(chatLieu, request);
         return shoeMapper.toChatLieuResponse(chatLieuRepository.save(chatLieu));
     }
@@ -56,5 +55,10 @@ public class ChatLieuServiceImpl implements ChatLieuService {
             throw new RuntimeException("Không tìm thấy chất liệu");
         }
         chatLieuRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<ChatLieu> searchChatLieu(String keyword, Pageable pageable) {
+        return chatLieuRepository.search(keyword, pageable);
     }
 }

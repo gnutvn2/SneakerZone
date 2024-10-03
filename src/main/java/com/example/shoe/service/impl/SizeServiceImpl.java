@@ -2,7 +2,6 @@ package com.example.shoe.service.impl;
 
 import com.example.shoe.dto.request.SizeRequest;
 import com.example.shoe.dto.response.SizeResponse;
-import com.example.shoe.entity.ChatLieu;
 import com.example.shoe.entity.Size;
 import com.example.shoe.mapper.ShoeMapper;
 import com.example.shoe.repository.SizeRepository;
@@ -10,9 +9,9 @@ import com.example.shoe.service.SizeService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,15 +21,12 @@ public class SizeServiceImpl implements SizeService {
     ShoeMapper shoeMapper;
 
     @Override
-    public List<Size> getSize() {
-        return sizeRepository.findAll();
+    public Page<Size> getSize(Pageable pageable) {
+        return sizeRepository.findAll(pageable);
     }
 
     @Override
     public Size createSize(SizeRequest request) {
-        if (sizeRepository.existsByTenSize(request.getTenSize())){
-            throw new RuntimeException("Size đã tồn tại. Vui lòng nhập tên size khác!");
-        }
         Size size = shoeMapper.toSize(request);
         return sizeRepository.save(size);
     }
@@ -56,5 +52,10 @@ public class SizeServiceImpl implements SizeService {
             throw new RuntimeException("Không tìm thấy size id: " +id);
         }
         sizeRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<Size> searchSize(String keyword, Pageable pageable) {
+        return sizeRepository.search(keyword, pageable);
     }
 }

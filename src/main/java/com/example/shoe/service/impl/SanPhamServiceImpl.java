@@ -92,5 +92,10 @@ public class SanPhamServiceImpl implements SanPhamService {
         return false;
     }
 
+    @Override
+    public Page<SanPham> searchSanPham(String keyword, Pageable pageable) {
+        return sanPhamRepository.search(keyword, pageable);
+    }
+
 
 }

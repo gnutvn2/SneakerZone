@@ -7,6 +7,8 @@ import ListThuongHieuComponent from './component/ThuongHieu/ListThuongHieuCompon
 import ThuongHieuComponent from './component/ThuongHieu/ThuongHieuComponent'
 import ListSanPhamComponent from './component/SanPham/ListSanPhamComponent';
 import SanPhamComponent from './component/SanPham/SanPhamComponent';
+import ListMauSac from './component/MauSac/ListMauSac';
+import Header from './component/header';
 
 function App() {
   return (
@@ -15,8 +17,11 @@ function App() {
         <div className='app-sidebar'>
           <Sidebar />
         </div>
-
+        <div className='app-header'>
+          <Header/>
+        </div>
         <div className='app-content'>
+
           <Routes>
             {/* Danh mục */}
             <Route path='/danh-muc' element={<ListDanhMuc />} />
@@ -25,13 +30,16 @@ function App() {
 
             {/*Thương hiệu */}
             <Route path='/thuong-hieu' element={<ListThuongHieuComponent />} />
-            <Route path='/add-thuong-hieu' element={<ThuongHieuComponent />}></Route>
-            <Route path='/update-thuong-hieu/:id' element={<ThuongHieuComponent />}></Route>
+            <Route path='/add-thuong-hieu' element={<ThuongHieuComponent />} />
+            <Route path='/update-thuong-hieu/:id' element={<ThuongHieuComponent />} />
 
             {/*Sản phẩm */}
-            <Route path='/san-pham' element={<ListSanPhamComponent />}></Route>
+            <Route path='/san-pham' element={<ListSanPhamComponent />} />
             <Route path='/add-san-pham' element={<SanPhamComponent />} />
             <Route path='/update-san-pham/:id' element={<SanPhamComponent />} />
+
+            {/*Màu sắc */}
+            <Route path='/mau-sac' element={<ListMauSac />} />
           </Routes>
         </div>
       </div>

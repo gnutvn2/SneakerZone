@@ -9,9 +9,9 @@ import com.example.shoe.service.DotGiamGiaService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -21,15 +21,12 @@ public class DotGiamGiaServiceImpl implements DotGiamGiaService {
     ShoeMapper shoeMapper;
 
     @Override
-    public List<DotGiamGia> getDotGiamGia() {
-        return dotGiamGiaRepository.findAll();
+    public Page<DotGiamGia> getDotGiamGia(Pageable pageable) {
+        return dotGiamGiaRepository.findAll(pageable);
     }
 
     @Override
     public DotGiamGia createDotGiamGia(DotGiamGiaRequest request) {
-        if (dotGiamGiaRepository.existsByTenDotGiamGia(request.getTenDotGiamGia())){
-            throw new RuntimeException("Đợt giảm giá này đã tồn tại. Vui lòng nhập tên đợt giảm giá khác!");
-        }
         DotGiamGia dotGiamGia = shoeMapper.toDotGiamGia(request);
         return dotGiamGiaRepository.save(dotGiamGia);
     }
@@ -55,5 +52,10 @@ public class DotGiamGiaServiceImpl implements DotGiamGiaService {
             throw new RuntimeException("Không tìm thấy id " + id);
         }
         dotGiamGiaRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<DotGiamGia> searchDotGiamGia(String keyword, Pageable pageable) {
+        return null;
     }
 }

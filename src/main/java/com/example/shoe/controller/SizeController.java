@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,8 @@ public class SizeController {
     SizeService sizeService;
 
     @GetMapping("")
-    public ResponseEntity<?> getSize(){
-        return ResponseEntity.ok(sizeService.getSize());
+    public ResponseEntity<?> getSize(Pageable pageable){
+        return ResponseEntity.ok(sizeService.getSize(pageable));
     }
 
     @PostMapping("")
@@ -42,5 +43,10 @@ public class SizeController {
     public ResponseEntity<?> deleteSize(@PathVariable("id") Integer id){
         sizeService.deleteSize(id);
         return ResponseEntity.status(HttpStatus.OK).body("Xóa size có id: " + id + " thành công!");
+    }
+
+    @GetMapping("/seacrh")
+    public ResponseEntity<?> searchSize(@RequestParam(required = false) String keyword, Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(sizeService.searchSize(keyword, pageable));
     }
 }

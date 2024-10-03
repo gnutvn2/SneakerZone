@@ -5,9 +5,6 @@ import com.example.shoe.dto.response.ThuongHieuResponse;
 import com.example.shoe.entity.ThuongHieu;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
-
 public interface ThuongHieuService {
     Page<ThuongHieu> getThuongHieu(Pageable pageable);
     ThuongHieu createThuongHieu(ThuongHieuRequest request);

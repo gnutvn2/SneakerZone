@@ -9,6 +9,8 @@ import com.example.shoe.service.DeGiayService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,15 +23,12 @@ public class DeGiayServiceImpl implements DeGiayService {
     ShoeMapper shoeMapper;
 
     @Override
-    public List<DeGiay> getDeGiay() {
-        return deGiayRepository.findAll();
+    public Page<DeGiay> getDeGiay(Pageable pageable) {
+        return deGiayRepository.findAll(pageable);
     }
 
     @Override
     public DeGiay createDeGiay(DeGiayRequest request) {
-        if (deGiayRepository.existsByTenDeGiay(request.getTenDeGiay())){
-            throw new RuntimeException("Đế giày đã tồn tại. Vui lòng nhập tên đế giày khác!");
-        }
         DeGiay deGiay = shoeMapper.toDeGiay(request);
         return deGiayRepository.save(deGiay);
     }
@@ -55,5 +54,10 @@ public class DeGiayServiceImpl implements DeGiayService {
             throw new RuntimeException("Không tìm thấy id " + id);
         }
         deGiayRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<DeGiay> searchDeGiay(String keyword, Pageable pageable) {
+        return deGiayRepository.search(keyword, pageable);
     }
 }

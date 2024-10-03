@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { createSanPham, getSanPham, updateSanPham} from '../../service/SanPhamService';
+import { createSanPham, getSanPham, getThuongHieu, getDanhMuc, updateSanPham } from '../../service/SanPhamService';
 
 const SanPhamComponent = () => {
   const { id } = useParams();
@@ -9,44 +9,77 @@ const SanPhamComponent = () => {
   const [maSanPham, setMaSanPham] = useState('');
   const [tenSanPham, setTenSanPham] = useState('');
   const [moTa, setMoTa] = useState('');
-  const [trangThai, setTrangThai] = useState(null);
+  const [trangThai, setTrangThai] = useState(true);
   const [ngayTao, setNgayTao] = useState('');
-  const [thuongHieuId, setThuongHieuId] = useState(''); 
+  const [thuongHieuId, setThuongHieuId] = useState('');
   const [danhMucId, setDanhMucId] = useState('');
+  const [th, setThuongHieu] = useState([]);
+  const [dm, setDanhMuc] = useState([]);
+  const [errors, setErrors] = useState({});
+
 
   useEffect(() => {
+    // Lấy danh sách thương hiệu và danh mục
+    getThuongHieu()
+      .then(response => {
+        setThuongHieu(response.data.content);
+      })
+      .catch(error => console.error("Có lỗi xảy ra khi lấy thương hiệu:", error));
+
+    getDanhMuc()
+      .then(response => {
+        setDanhMuc(response.data.content);
+      })
+      .catch(error => console.error("Có lỗi xảy ra khi lấy danh mục:", error));
+
     if (id) {
+      console.log("ID sản phẩm:", id);
       getSanPham(id)
+
         .then(response => {
           const { maSanPham, tenSanPham, moTa, trangThai, ngayTao, thuongHieuId, danhMucId } = response.data;
           setMaSanPham(maSanPham);
           setTenSanPham(tenSanPham);
           setMoTa(moTa);
-          setTrangThai(trangThai);
+          setTrangThai(trangThai === 'Hoạt động');
           setNgayTao(ngayTao);
-          setThuongHieuId(thuongHieuId || '');
-          setDanhMucId(danhMucId || '');
+          setThuongHieuId(thuongHieuId);
+          setDanhMucId(danhMucId);
         })
         .catch(error => {
           console.error("Có lỗi xảy ra khi lấy sản phẩm:", error);
-          setErrors({ apiError: "Không thể lấy thông tin sản phẩm. Vui lòng thử lại sau." });
         });
     }
-
   }, [id]);
 
   const saveOrUpdate = (e) => {
     e.preventDefault();
-    const sanPham = { maSanPham, tenSanPham, moTa, trangThai, ngayTao, thuongHieuId, danhMucId };
+    const sanPham = {
+      maSanPham,
+      tenSanPham,
+      moTa,
+      trangThai: trangThai ? true : false,
+      ngayTao,
+      thuongHieuId,
+      danhMucId
+    };
+
+    const handleError = (error) => {
+      if (error.response && error.response.data) {
+        setErrors(error.response.data);
+      } else {
+        console.log(error);
+      };
+    };
 
     if (id) {
       updateSanPham(id, sanPham)
         .then(() => navigate('/san-pham'))
-        .catch(error => console.error("Cập nhật sản phẩm thất bại:", error));
+        .catch(handleError);
     } else {
       createSanPham(sanPham)
         .then(() => navigate('/san-pham'))
-        .catch(error => console.error("Thêm sản phẩm thất bại:", error));
+        .catch(handleError);
     }
   };
 
@@ -57,7 +90,6 @@ const SanPhamComponent = () => {
         <div className='card col-md-6 offset-md-3'>
           <h5 className='text-center' style={{ marginTop: "15px" }}>{id ? "Cập nhật sản phẩm" : "Thêm sản phẩm"}</h5>
           <div className='card-body'>
-
             <form>
               <div className="row">
                 <div className='form-group mb-3 col-md-6'>
@@ -68,9 +100,9 @@ const SanPhamComponent = () => {
                     name='maSanPham'
                     value={maSanPham}
                     onChange={(e) => setMaSanPham(e.target.value)}
-                    className='form-control'
-
+                    className={`form-control ${errors.maSanPham ? 'is-invalid' : ''}`}
                   />
+                  {errors.maSanPham && <div className='invalid-feedback'>{errors.maSanPham}</div>}
                 </div>
 
                 <div className='form-group mb-3 col-md-6'>
@@ -81,9 +113,9 @@ const SanPhamComponent = () => {
                     name='tenSanPham'
                     value={tenSanPham}
                     onChange={(e) => setTenSanPham(e.target.value)}
-                    className='form-control'
-
+                    className={`form-control ${errors.tenSanPham ? 'is-invalid' : ''}`}
                   />
+                  {errors.tenSanPham && <div className='invalid-feedback'>{errors.tenSanPham}</div>}
                 </div>
               </div>
 
@@ -122,50 +154,63 @@ const SanPhamComponent = () => {
                     type='date'
                     value={ngayTao}
                     onChange={(e) => setNgayTao(e.target.value)}
-                    className='form-control'
-
+                    className={`form-control ${errors.ngayTao ? 'is-invalid' : ''}`}
                   />
+                  {errors.ngayTao && <div className='invalid-feedback'>{errors.ngayTao}</div>}
                 </div>
 
                 <div className='col-md-4'>
                   <label className='form-label'>Thương hiệu:</label>
                   <select
-                    className="form-select"
+                    className={`form-select ${errors.thuongHieuId ? 'is-invalid':''}`}
                     value={thuongHieuId}
                     onChange={(e) => setThuongHieuId(e.target.value)}
-
                   >
                     <option value="">Chọn thương hiệu</option>
+                    {th.map((thuongHieu) => (
+                      <option key={thuongHieu.id} value={thuongHieu.id}>
+                        {thuongHieu.tenThuongHieu}
+                      </option>
+                    ))}
                   </select>
+                  {errors.thuongHieuId && <div className='invalid-feedback'>{errors.thuongHieuId}</div>}
                 </div>
 
                 <div className='col-md-4'>
                   <label className='form-label'>Danh mục:</label>
                   <select
-                    className="form-select"
+                    className={`form-select ${errors.danhMucId ? 'is-invalid' : ''}`}
                     value={danhMucId}
                     onChange={(e) => setDanhMucId(e.target.value)}
-
                   >
                     <option value="">Chọn danh mục</option>
-
+                    {dm.map((danhMuc) => (
+                      <option key={danhMuc.id} value={danhMuc.id}>
+                        {danhMuc.tenDanhMuc}
+                      </option>
+                    ))}
                   </select>
+                  {errors.danhMucId && <div className='invalid-feedback'>{errors.danhMucId}</div>}
                 </div>
               </div>
 
               <div className='form-group mb-3'>
                 <label className='form-label'>Mô tả: </label>
                 <textarea
+                  rows='4'
                   placeholder='Nhập mô tả sản phẩm...'
-                  name='moTa'
                   value={moTa}
                   onChange={(e) => setMoTa(e.target.value)}
                   className='form-control'
                 />
               </div>
 
-              <button className='btn btn-primary' onClick={saveOrUpdate}>Lưu</button>
-              <button className='btn btn-danger' onClick={() => navigate('/san-pham')} style={{ marginLeft: "10px" }}>Hủy</button>
+              <button className='btn btn-success' onClick={saveOrUpdate}>
+                {id ? "Cập nhật" : "Thêm"}
+              </button>
+              <button className='btn btn-danger' style={{ marginLeft: "10px" }} onClick={() => navigate('/san-pham')}>
+                Quay lại
+              </button>
             </form>
           </div>
         </div>
