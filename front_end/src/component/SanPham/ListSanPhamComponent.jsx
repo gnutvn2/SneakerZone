@@ -11,13 +11,16 @@ const ListSanPhamComponent = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const itemsPerPage = 8;
+    const [searchQuery, setSearchQuery] = useState('');
 
     const getAllSanPham = () => {
-        listSanPham({ page: currentPage, size: itemsPerPage }, true)
+        const params = {page: currentPage, size: itemsPerPage};
+        listSanPham(params, true)
             .then((response) => {
                 setSanPham(response.data.content);
                 setTotalPages(response.data.totalPages);
-            }).catch((error) => {
+            })
+            .catch((error) => {
                 console.log(error);
             });
     };
@@ -29,7 +32,6 @@ const ListSanPhamComponent = () => {
     const updateSanPham = (id) => {
         navigator(`/update-san-pham/${id}`);
     };
-
 
     const handleUpdateTrangThai = (sanPhamId) => {
         updateTrangThai(sanPhamId)
@@ -74,7 +76,13 @@ const ListSanPhamComponent = () => {
 
     useEffect(() => {
         getAllSanPham();
-    }, [currentPage]);
+    }, [currentPage]); // Khi currentPage hoặc searchQuery thay đổi, gọi lại getAllSanPham
+
+    // const handlerSearchInput = (e) => {
+    //     setSearchQuery(e.target.value);
+    //     setCurrentPage(0); // Đặt lại trang về 0 mỗi khi thay đổi từ khóa tìm kiếm
+    //     getAllSanPham();
+    // }
 
     return (
         <div className='container'>
@@ -90,10 +98,19 @@ const ListSanPhamComponent = () => {
                                 <i className='bi bi-arrow-counterclockwise'></i> Sản phẩm không hoạt động
                             </button>
                         </div>
+                        {/* <div>
+                            <input
+                                type="text"
+                                placeholder='Tìm kiếm...'
+                                className='form-control'
+                                value={searchQuery}
+                                onChange={handlerSearchInput}
+                            />
+                        </div> */}
                     </div>
 
                     <table className='table table-hover text-center'>
-                        <thead >
+                        <thead>
                             <tr>
                                 <th>ID sản phẩm</th>
                                 <th>Mã sản phẩm</th>
@@ -121,19 +138,18 @@ const ListSanPhamComponent = () => {
                                                 className='btn btn-danger'
                                                 onClick={() => handleUpdateTrangThai(sanPham.id)}
                                             >
-                                                <i class="bi bi-arrow-repeat"></i>
+                                                <i className="bi bi-arrow-repeat"></i>
                                             </button>
                                             <button
                                                 className='btn btn-info'
                                                 style={{ marginLeft: '10px' }}
-                                                onClick={() => updateSanPham(sanPham.id)} // Thêm id vào đây
-                                            >
+                                                onClick={() => updateSanPham(sanPham.id)}>
                                                 <i className="bi bi-pencil-square"></i>
                                             </button>
                                             <button
                                                 className='btn btn-success'
                                                 style={{ marginLeft: '10px' }}>
-                                                <i class="bi bi-eye"></i>
+                                                <i className="bi bi-eye"></i>
                                             </button>
                                         </td>
                                     </tr>

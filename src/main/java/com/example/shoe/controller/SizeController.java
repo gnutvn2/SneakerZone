@@ -45,7 +45,7 @@ public class SizeController {
         return ResponseEntity.status(HttpStatus.OK).body("Xóa size có id: " + id + " thành công!");
     }
 
-    @GetMapping("/seacrh")
+    @GetMapping("/search")
     public ResponseEntity<?> searchSize(@RequestParam(required = false) String keyword, Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(sizeService.searchSize(keyword, pageable));
     }

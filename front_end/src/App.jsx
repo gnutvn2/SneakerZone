@@ -9,6 +9,13 @@ import ListSanPhamComponent from './component/SanPham/ListSanPhamComponent';
 import SanPhamComponent from './component/SanPham/SanPhamComponent';
 import ListMauSac from './component/MauSac/ListMauSac';
 import Header from './component/header';
+import MauSac from './component/MauSac/MauSac';
+import ListChatLieu from './component/ChatLieu/ListChatLieu';
+import ChatLieu from './component/ChatLieu/ChatLieu';
+import ListSize from './component/Size/ListSize';
+import SizeComponent from './component/Size/SizeComponent';
+import ListDeGiay from './component/DeGiay/ListDeGiay';
+import DeGiayComponent from './component/DeGiay/DeGiayComponent';
 
 function App() {
   return (
@@ -18,7 +25,7 @@ function App() {
           <Sidebar />
         </div>
         <div className='app-header'>
-          <Header/>
+          <Header />
         </div>
         <div className='app-content'>
 
@@ -40,6 +47,25 @@ function App() {
 
             {/*Màu sắc */}
             <Route path='/mau-sac' element={<ListMauSac />} />
+            <Route path='/add-mau-sac' element={<MauSac />} />
+            <Route path='/update-mau-sac/:id' element={<MauSac />} />
+
+            {/*Chất liệu */}
+            <Route path='/chat-lieu' element={<ListChatLieu />} />
+            <Route path='/add-chat-lieu' element={<ChatLieu />} />
+            <Route path='/update-chat-lieu/:id' element={<ChatLieu />} />
+
+            {/*Size */}
+            <Route path='/size' element={<ListSize />} />
+            <Route path='/add-size' element={< SizeComponent />} />
+            <Route path='/update-size/:id' element={<SizeComponent />} />
+
+            {/*Đế giày */}
+            <Route path='/de-giay' element={<ListDeGiay />} />
+            <Route path='/add-de-giay' element={<DeGiayComponent />} />
+            <Route path='/update-de-giay/:id' element={<DeGiayComponent />} />
+
+
           </Routes>
         </div>
       </div>

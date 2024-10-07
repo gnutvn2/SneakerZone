@@ -43,7 +43,7 @@ public class MauSacServiceImpl implements MauSacService {
         MauSac mauSac = mauSacRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy id: " + id));
         shoeMapper.toUpdateMauSac(mauSac, request);
-        return shoeMapper.toMauSacResponse(mauSac);
+        return shoeMapper.toMauSacResponse(mauSacRepository.save(mauSac));
     }
 
     @Override

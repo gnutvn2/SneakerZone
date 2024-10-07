@@ -4,15 +4,17 @@ const apiSanPham = "http://localhost:8080/san-pham";
 const apiThuongHieu = "http://localhost:8080/thuong-hieu";
 const apiDanhMuc = "http://localhost:8080/danh-muc";
 
-export const listSanPham = (pageale, trangThai = true) => {
-    return axios.get(apiSanPham, {
+export const listSanPham = (pageable, trangThai = true) => {
+    return axios.get(apiSanPham , {
         params: {
-            page: pageale.page,
-            size: pageale.size,
-            trangThai: trangThai // true hoặc false - trạng thái sản phẩm
+            page: pageable.page,
+            size: pageable.size,
+            trangThai: trangThai
         }
     });
 };
+
+
 
 export const createSanPham = (sanPham) => axios.post(apiSanPham, sanPham);
 export const getSanPham = (sanPhamId) => axios.get(apiSanPham + '/' + sanPhamId);

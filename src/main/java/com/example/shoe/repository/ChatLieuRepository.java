@@ -13,7 +13,7 @@ public interface ChatLieuRepository extends JpaRepository<ChatLieu, Integer> {
     @Query("""
             select cl
             from ChatLieu cl
-            where cl.maChatLieu like %:kwyword%
+            where cl.maChatLieu like %:keyword%
             or cl.tenChatLieu like %:keyword%
             """)
     Page<ChatLieu> search(@Param("keyword") String keyword, Pageable pageable);
