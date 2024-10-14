@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -19,4 +21,6 @@ public class Size {
     String maSize;
     @Column(name = "ten_size")
     String tenSize;
+    @OneToMany(mappedBy = "size")
+    List<ChiTietSanPham> listChiTietSanPham;
 }

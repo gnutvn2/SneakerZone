@@ -11,17 +11,33 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SanPhamRepository extends JpaRepository<SanPham, Integer> {
 
-    @Query("SELECT sp FROM SanPham sp WHERE sp.trangThai = :trangThai")
-    Page<SanPham> hienThi(@Param("trangThai") Boolean trangThai, Pageable pageable);
-
+    //Get product by status active
     @Query("""
-            select sp
-            from SanPham sp
-            where sp.maSanPham like %:keyword%
-            or sp.tenSanPham like %:keyword%
-            or sp.danhMuc.tenDanhMuc like %:keyword%
-            or sp.thuongHieu.tenThuongHieu like %:keyword%
+            SELECT sp FROM SanPham sp
+            WHERE sp.trangThai = true
             """)
-    Page<SanPham> search(@Param("keyword") String keyword, Pageable pageable);
+    Page<SanPham> findActiveProducts(Pageable pageable);
+
+    //Get product by status inactive
+    @Query("""
+            SELECT sp FROM SanPham sp
+            WHERE sp.trangThai = false
+            """)
+    Page<SanPham> findInactiveProducts(Pageable pageable);
+
+    //Search products by keyword
+    @Query("""
+            SELECT sp
+            FROM SanPham sp
+            WHERE (:trangThai IS NULL OR sp.trangThai = :trangThai)
+            AND (:keyword IS NULL OR :keyword = '' 
+            OR sp.maSanPham LIKE %:keyword%
+            OR sp.tenSanPham LIKE %:keyword%
+            OR sp.danhMuc.tenDanhMuc LIKE %:keyword%
+            OR sp.thuongHieu.tenThuongHieu LIKE %:keyword%)
+            """)
+    Page<SanPham> search(@Param("keyword") String keyword, @Param("trangThai") Boolean trangThai, Pageable pageable);
+
+
 
 }

@@ -26,76 +26,73 @@ public class SanPhamServiceImpl implements SanPhamService {
     ThuongHieuRepository thuongHieuRepository;
     DanhMucRepository danhMucRepository;
 
-    @Override
-    public Page<SanPham> getSanPham(Boolean trangThai, Pageable pageable) {
-        return sanPhamRepository.hienThi(trangThai, pageable);
+        @Override
+    public Page<SanPhamResponse> getSanPhamByStatus(Boolean trangThai, Pageable pageable) {
+        Page<SanPham> sanPhamPage;
+
+        if (trangThai == null) {
+            sanPhamPage = sanPhamRepository.findAll(pageable);
+        } else if (trangThai) {
+            sanPhamPage = sanPhamRepository.findActiveProducts(pageable);
+        } else {
+            sanPhamPage = sanPhamRepository.findInactiveProducts(pageable);
+        }
+
+        return sanPhamPage.map(shoeMapper::toSanPhamResponse);
     }
 
+//    @Override
+//    public Page<SanPhamResponse> getSanPhamByStatus(Boolean trangThai, Pageable pageable) {
+//        return sanPhamRepository.search(null, trangThai, pageable)
+//                .map(shoeMapper::toSanPhamResponse);
+//    }
+
 
     @Override
-    public SanPham createSanPham(SanPhamRequest request) {
-
-        ThuongHieu thuongHieu = thuongHieuRepository.findById(request.getThuongHieuId())
-                .orElseThrow(() -> new RuntimeException("Thương hiệu không tồn tại!"));
-        DanhMuc danhMuc = danhMucRepository.findById(request.getDanhMucId())
-                .orElseThrow(() -> new RuntimeException("Danh mục không tồn tại!"));
-
+    public SanPhamResponse createSanPham(SanPhamRequest request) {
         SanPham sanPham = shoeMapper.toSanPham(request);
-        sanPham.setThuongHieu(thuongHieu);
-        sanPham.setDanhMuc(danhMuc);
-
-        return sanPhamRepository.save(sanPham);
+        sanPham = sanPhamRepository.save(sanPham);
+        return shoeMapper.toSanPhamResponse(sanPham);
     }
 
     @Override
-    public SanPhamResponse getSanPhamId(Integer id) {
+    public SanPhamResponse getSanPhamById(Integer id) {
         SanPham sanPham = sanPhamRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm có id vừa nhập!"));
+                .orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại!"));
         return shoeMapper.toSanPhamResponse(sanPham);
     }
 
     @Override
     public SanPhamResponse updateSanPham(Integer id, SanPhamRequest request) {
         SanPham sanPham = sanPhamRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy sản phẩm có id vừa nhập!"));
+                .orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại!"));
 
-        if (request.getThuongHieuId() != null) {
-            ThuongHieu thuongHieu = thuongHieuRepository.findById(request.getThuongHieuId())
-                    .orElseThrow(() -> new RuntimeException("Thương hiệu không tồn tại!"));
-            sanPham.setThuongHieu(thuongHieu);
-        }
+        DanhMuc danhMuc = danhMucRepository.findById(request.getDanhMucId())
+                .orElseThrow(() -> new RuntimeException("Danh mục không tồn tại!"));
 
-        if (request.getDanhMucId() != null) {
-            DanhMuc danhMuc = danhMucRepository.findById(request.getDanhMucId())
-                    .orElseThrow(() -> new RuntimeException("Danh mục không tồn tại!"));
-            sanPham.setDanhMuc(danhMuc);
-        }
+        ThuongHieu thuongHieu = thuongHieuRepository.findById(request.getThuongHieuId())
+                .orElseThrow(() -> new RuntimeException("Thương hiệu không tồn tại!"));
+
+        sanPham.setDanhMuc(danhMuc);
+        sanPham.setThuongHieu(thuongHieu);
 
         shoeMapper.toUpdateSanPham(sanPham, request);
-        return shoeMapper.toSanPhamResponse(sanPhamRepository.save(sanPham));
+        sanPham = sanPhamRepository.save(sanPham);
+        return shoeMapper.toSanPhamResponse(sanPham);
     }
 
-
     @Override
-    public Boolean updateTrangThai(Integer id) {
-        SanPham sanPham = sanPhamRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại"));
-        if (id != null) {
-            if (sanPham.getTrangThai().equals(true)) {
-                sanPham.setTrangThai(false);
-            } else {
-                sanPham.setTrangThai(true);
-            }
-            sanPhamRepository.save(sanPham);
-            return true;
+    public void deleteSanPham(Integer id) {
+        if (!sanPhamRepository.existsById(id)) {
+            throw new RuntimeException("Sản phẩm không tồn tại!");
         }
-        return false;
+        sanPhamRepository.deleteById(id);
     }
 
     @Override
-    public Page<SanPham> searchSanPham(String keyword, Pageable pageable) {
-        return sanPhamRepository.search(keyword, pageable);
+    public Page<SanPhamResponse> searchSanPham(String keyword, Boolean trangThai, Pageable pageable) {
+        Page<SanPham> sanPhamPage = sanPhamRepository.search(keyword, trangThai, pageable);
+        return sanPhamPage.map(shoeMapper::toSanPhamResponse);
     }
-
 
 }

@@ -1,8 +1,11 @@
 package com.example.shoe.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Setter
 @Getter
@@ -19,4 +22,7 @@ public class ThuongHieu {
     String maThuongHieu;
     @Column(name = "ten_thuong_hieu")
     String tenThuongHieu;
+    @OneToMany(mappedBy = "thuongHieu")
+    @JsonBackReference
+    List<SanPham> listSanPham;
 }

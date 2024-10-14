@@ -17,6 +17,5 @@ public class ThuongHieuRequest {
     @Size(max = 10, message = "Mã danh mục không vượt quá 10 ký tự")
     String maThuongHieu;
     @NotBlank(message = "Tên thương hiệu không được để trống")
-    @Pattern(regexp = "^[a-zA-Z0-9]*$", message = "Mã thương hiệu chỉ được chứa chữ cái và số!")
     String tenThuongHieu;
 }

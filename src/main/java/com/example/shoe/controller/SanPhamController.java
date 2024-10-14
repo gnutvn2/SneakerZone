@@ -2,7 +2,6 @@ package com.example.shoe.controller;
 
 import com.example.shoe.dto.request.SanPhamRequest;
 import com.example.shoe.dto.response.SanPhamResponse;
-import com.example.shoe.entity.SanPham;
 import com.example.shoe.service.SanPhamService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -24,37 +23,41 @@ public class SanPhamController {
 
     @GetMapping("")
     public ResponseEntity<?> getAllSanPham(
-            @RequestParam(defaultValue = "true") Boolean trangThai,
-            Pageable pageable
-    ) {
-        Page<SanPham> sanPham = sanPhamService.getSanPham(trangThai, pageable);
-        System.out.println(trangThai);
-        return ResponseEntity.ok(sanPham);
+            @RequestParam(required = false) Boolean trangThai, Pageable pageable) {
+        Page<SanPhamResponse> sanPhamPage = sanPhamService.getSanPhamByStatus(trangThai, pageable);
+        return ResponseEntity.ok(sanPhamPage);
     }
 
     @PostMapping("")
     public ResponseEntity<?> createSanPham(@RequestBody @Valid SanPhamRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(sanPhamService.createSanPham(request));
+        SanPhamResponse sanPhamResponse = sanPhamService.createSanPham(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(sanPhamResponse);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getSanPhamId(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok(sanPhamService.getSanPhamId(id));
+    public ResponseEntity<?> getSanPhamById(@PathVariable("id") Integer id) {
+        SanPhamResponse sanPhamResponse = sanPhamService.getSanPhamById(id);
+        return ResponseEntity.ok(sanPhamResponse);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<?> updateSanPham(@PathVariable("id") Integer id, @RequestBody @Valid SanPhamRequest request) {
-        return ResponseEntity.ok(sanPhamService.updateSanPham(id, request));
+        SanPhamResponse sanPhamResponse = sanPhamService.updateSanPham(id, request);
+        return ResponseEntity.ok(sanPhamResponse);
     }
-
-    @PutMapping("/status/{id}")
-    public Boolean updateTrangThai(@PathVariable Integer id) {
-       return sanPhamService.updateTrangThai(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSanPham(@PathVariable Integer id) {
+        sanPhamService.deleteSanPham(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> search(@RequestParam(required = false) String keyword, Pageable pageable){
-        return ResponseEntity.status(HttpStatus.OK).body(sanPhamService.searchSanPham(keyword, pageable));
+    public ResponseEntity<Page<SanPhamResponse>> searchSanPham(
+            @RequestParam String keyword,
+            @RequestParam(required = false) Boolean trangThai,
+            Pageable pageable) {
+        Page<SanPhamResponse> sanPhamResponses = sanPhamService.searchSanPham(keyword, trangThai, pageable);
+        return ResponseEntity.ok(sanPhamResponses);
     }
 
 }

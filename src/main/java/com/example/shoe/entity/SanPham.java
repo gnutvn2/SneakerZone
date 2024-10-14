@@ -1,10 +1,13 @@
 package com.example.shoe.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
+import java.util.List;
 
 @Setter
 @Getter
@@ -13,6 +16,7 @@ import java.util.Date;
 @Entity
 @Table(name = "san_pham")
 @FieldDefaults(level = AccessLevel.PRIVATE)
+
 public class SanPham {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,15 +27,19 @@ public class SanPham {
     String tenSanPham;
     @Column(name = "mo_ta")
     String moTa;
-    @Temporal(TemporalType.DATE)//Lay ngay khong lay gio
+    @Temporal(TemporalType.DATE)
     @Column(name = "ngay_tao")
     Date ngayTao;
     @Column(name = "trang_thai")
     Boolean trangThai;
     @JoinColumn(name = "thuong_hieu_id")
     @ManyToOne
+    @JsonManagedReference
     ThuongHieu thuongHieu;
     @JoinColumn(name = "danh_muc_id")
     @ManyToOne
+    @JsonManagedReference
     DanhMuc danhMuc;
+    @OneToMany(mappedBy = "sanPham")
+    List<ChiTietSanPham> listChiTietSanPham;
 }

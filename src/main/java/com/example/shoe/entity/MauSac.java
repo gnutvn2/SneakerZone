@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -19,4 +21,6 @@ public class MauSac {
     String maMauSac;
     @Column(name = "ten_mau_sac")
     String tenMauSac;
+    @OneToMany(mappedBy = "mauSac")
+    List<ChiTietSanPham> listChiTietSanPham;
 }

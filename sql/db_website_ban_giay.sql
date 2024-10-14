@@ -49,15 +49,16 @@ create table chat_lieu(
  );
 
  -- tạo bảng đợt giảm giá cho sản phẩm
- create table dot_giam_gia(
-	id int identity(1,1) primary key,
-	ma_dot_giam_gia varchar(30) unique not null,
-	ten_dot_giam_gia nvarchar(100) not null,
-	gia_tri_giam int not null, --giảm theo % giá tiền sản phẩm : 10%, 20%,..
-	ngay_bat_dau datetime not null,
-	ngay_ket_thuc datetime not null,
-	trang_thai bit not null
- );
+ --create table dot_giam_gia(
+	--id int identity(1,1) primary key,
+	--ma_dot_giam_gia varchar(30) unique not null,
+	--ten_dot_giam_gia nvarchar(100) not null,
+	--gia_tri_giam int not null, --giảm theo % giá tiền sản phẩm : 10%, 20%,..
+	--ngay_bat_dau datetime not null,
+	--ngay_ket_thuc datetime not null,
+	--trang_thai bit not null
+ --);
+
 
  -- tạo bảng sản phẩm
 create table san_pham(
@@ -89,6 +90,7 @@ create table san_pham(
  create table chi_tiet_san_pham(
 	id int identity(1,1) primary key,
 	ma_chi_tiet_san_pham varchar(50) not null,
+	ten_chi_tiet_san_pham nvarchar(100) not null,
 	hinh_anh nvarchar(255) not null,
 	so_luong_ton int not null,
 	gia decimal(10,2) not null,
@@ -99,8 +101,9 @@ create table san_pham(
 	size_id int not null foreign key (size_id) references size(id),
 	chat_lieu_id int not null foreign key (chat_lieu_id) references chat_lieu(id),
 	de_giay_id int not null foreign key (de_giay_id) references de_giay(id),
-	dot_giam_gia_id int not null foreign key (dot_giam_gia_id) references dot_giam_gia(id)
+	--dot_giam_gia_id int null foreign key (dot_giam_gia_id) references dot_giam_gia(id)
  );
+
 
 -- tạo bảng phiếu giảm giá
 create table phieu_giam_gia(
@@ -174,7 +177,7 @@ create table chi_tiet_hoa_don (
 );
 
 -- tạo bảng giao hàng
---create table giao_hang (
+--create table giao_hang ( 
 --    id int identity(1,1) primary key,
 --    ma_giao_hang varchar(30) not null,
 --    hoa_don_id int unique not null, -- Đảm bảo rằng mỗi hóa đơn chỉ có một giao hàng

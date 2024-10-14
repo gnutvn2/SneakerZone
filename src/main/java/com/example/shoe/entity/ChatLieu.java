@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -19,4 +21,6 @@ public class ChatLieu {
     String maChatLieu;
     @Column(name = "ten_chat_lieu")
     String tenChatLieu;
+    @OneToMany(mappedBy = "chatLieu")
+    List<ChiTietSanPham> listChiTietSanPham;
 }

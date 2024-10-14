@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -25,4 +26,5 @@ public class SanPhamRequest {
     Integer thuongHieuId;
     @NotNull(message = "Vui lòng chọn ID danh mục!")
     Integer danhMucId;
+    List<ChiTietSanPhamRequest> listChiTietSanPham;
 }

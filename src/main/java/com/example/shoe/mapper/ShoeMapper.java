@@ -6,6 +6,7 @@ import com.example.shoe.entity.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+
 @Mapper(componentModel = "spring")
 public interface ShoeMapper {
     //Mapper chất liệu
@@ -43,41 +44,31 @@ public interface ShoeMapper {
     SizeResponse toSizeResponse(Size size);
     void toUpdateSize(@MappingTarget Size size, SizeRequest request);
 
-    //Mapper đợt giảm giá
-    DotGiamGia toDotGiamGia(DotGiamGiaRequest request);
-    DotGiamGiaResponse toDotGiamGiaResponse(DotGiamGia dotGiamGia);
-    void toUpdateDotGiamGia(@MappingTarget DotGiamGia dotGiamGia, DotGiamGiaRequest request);
 
-
-    /*
     //Mapper sản phẩm
-    @Mapping(source = "thuongHieuId", target = "thuongHieu.id"):
-
-    source = "thuongHieuId": Đây là tên của trường trong SanPhamRequest.
-    target = "thuongHieu.id": Đây là thuộc tính mà bạn muốn ánh xạ trong đối tượng SanPham.
-    Thay vì gán ID trực tiếp, bạn ánh xạ nó vào thuộc tính id của đối tượng ThuongHieu trong SanPham.
-    @Mapping(source = "danhMucId", target = "danhMuc.id"):
-
-    source = "danhMucId": Tên của trường trong SanPhamRequest.
-    target = "danhMuc.id": Tên thuộc tính trong đối tượng SanPham mà bạn muốn ánh xạ.
-     */
     @Mapping(source = "thuongHieuId", target = "thuongHieu.id")
     @Mapping(source = "danhMucId", target = "danhMuc.id")
     SanPham toSanPham(SanPhamRequest request);
-
     SanPhamResponse toSanPhamResponse(SanPham sanPham);
-
-    /*
-    @Mapping(target = "thuongHieu.id", source = "thuongHieuId"):
-
-    target = "thuongHieu.id": Địa chỉ thuộc tính trong đối tượng SanPham mà bạn muốn cập nhật.
-    source = "thuongHieuId": Tên của trường trong SanPhamRequest.
-    @Mapping(target = "danhMuc.id", source = "danhMucId"):
-
-    target = "danhMuc.id": Địa chỉ thuộc tính trong đối tượng SanPham mà bạn muốn cập nhật.
-    source = "danhMucId": Tên của trường trong SanPhamRequest.
-     */
     @Mapping(target = "thuongHieu.id", source = "thuongHieuId")
     @Mapping(target = "danhMuc.id", source = "danhMucId")
     void toUpdateSanPham(@MappingTarget SanPham sanPham, SanPhamRequest request);
+
+
+    //Mapper chi tiết sản phẩm
+    @Mapping(source = "sanPhamId", target = "sanPham.id")
+    @Mapping(source = "mauSacId", target = "mauSac.id")
+    @Mapping(source = "sizeId", target = "size.id")
+    @Mapping(source = "chatLieuId", target = "chatLieu.id")
+    @Mapping(source = "deGiayId", target = "deGiay.id")
+    @Mapping(source = "tenChiTietSanPham", target = "tenChiTietSanPham")
+    ChiTietSanPham toChiTietSanPham(ChiTietSanPhamRequest request);
+    ChiTietSanPhamResponse toChiTietSanPhamResponse(ChiTietSanPham chiTietSanPham);
+    @Mapping(source = "sanPhamId", target = "sanPham.id")
+    @Mapping(source = "mauSacId", target = "mauSac.id")
+    @Mapping(source = "sizeId", target = "size.id")
+    @Mapping(source = "chatLieuId", target = "chatLieu.id")
+    @Mapping(source = "deGiayId", target = "deGiay.id")
+    @Mapping(source = "tenChiTietSanPham", target = "tenChiTietSanPham")
+    void toUpdateChiTietSanPham(@MappingTarget ChiTietSanPham chiTietSanPham, ChiTietSanPhamRequest request);
 }

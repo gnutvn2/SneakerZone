@@ -19,7 +19,6 @@ const SanPhamComponent = () => {
 
 
   useEffect(() => {
-    // Lấy danh sách thương hiệu và danh mục
     getThuongHieu()
       .then(response => {
         setThuongHieu(response.data.content);
@@ -33,7 +32,6 @@ const SanPhamComponent = () => {
       .catch(error => console.error("Có lỗi xảy ra khi lấy danh mục:", error));
 
     if (id) {
-      console.log("ID sản phẩm:", id);
       getSanPham(id)
 
         .then(response => {
@@ -41,7 +39,7 @@ const SanPhamComponent = () => {
           setMaSanPham(maSanPham);
           setTenSanPham(tenSanPham);
           setMoTa(moTa);
-          setTrangThai(trangThai === 'Hoạt động');
+          setTrangThai(trangThai === 'Đang bán');
           setNgayTao(ngayTao);
           setThuongHieuId(thuongHieuId);
           setDanhMucId(danhMucId);
@@ -131,7 +129,7 @@ const SanPhamComponent = () => {
                       onChange={() => setTrangThai(true)}
                       className='form-check-input'
                     />
-                    <label className='form-check-label' htmlFor='active'>Hoạt động</label>
+                    <label className='form-check-label' htmlFor='active'>Đang bán</label>
                   </div>
                   <div className='form-check form-check-inline'>
                     <input
@@ -142,7 +140,7 @@ const SanPhamComponent = () => {
                       onChange={() => setTrangThai(false)}
                       className='form-check-input'
                     />
-                    <label className='form-check-label' htmlFor='inactive'>Không hoạt động</label>
+                    <label className='form-check-label' htmlFor='inactive'>Ngừng bán</label>
                   </div>
                 </div>
               </div>
