@@ -1,5 +1,6 @@
 package com.example.shoe.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -41,5 +42,6 @@ public class SanPham {
     @JsonManagedReference
     DanhMuc danhMuc;
     @OneToMany(mappedBy = "sanPham")
+    @JsonBackReference
     List<ChiTietSanPham> listChiTietSanPham;
 }

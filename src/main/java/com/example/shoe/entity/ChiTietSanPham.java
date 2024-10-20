@@ -1,5 +1,7 @@
 package com.example.shoe.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -28,18 +30,23 @@ public class ChiTietSanPham {
     @Column(name = "trang_thai")
     Boolean trangThai;
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name = "san_pham_id")
     SanPham sanPham;
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "mau_sac_id")
     MauSac mauSac;
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name = "size_id")
     Size size;
     @ManyToOne
     @JoinColumn(name = "chat_lieu_id")
+    @JsonManagedReference
     ChatLieu chatLieu;
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name = "de_giay_id")
     DeGiay deGiay;
 }

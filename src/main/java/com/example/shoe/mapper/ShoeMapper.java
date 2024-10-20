@@ -6,6 +6,7 @@ import com.example.shoe.entity.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.springframework.web.multipart.MultipartFile;
 
 @Mapper(componentModel = "spring")
 public interface ShoeMapper {
@@ -14,36 +15,30 @@ public interface ShoeMapper {
     ChatLieuResponse toChatLieuResponse(ChatLieu chatLieu);
     void toUpdateChatLieu(@MappingTarget ChatLieu chatLieu, ChatLieuRequest request);
 
-
     //Mapper danh mục
     DanhMuc toDanhMuc(DanhMucRequest request);
     DanhMucResponse toDanhMucResponse(DanhMuc danhMuc);
     void toUpdateDanhMuc(@MappingTarget DanhMuc danhMuc, DanhMucRequest request);
-
 
     //Mapper đế giày
     DeGiay toDeGiay(DeGiayRequest request);
     DeGiayResponse toDeGiayResponse(DeGiay deGiay);
     void toUpdateDeGiay(@MappingTarget DeGiay deGiay, DeGiayRequest request);
 
-
     //Mapper màu sắc
     MauSac toMauSac(MauSacRequest request);
     MauSacResponse toMauSacResponse(MauSac mauSac);
     void toUpdateMauSac(@MappingTarget MauSac mauSac, MauSacRequest request);
-
 
     //Mapper thương hiệu
     ThuongHieu toThuongHieu(ThuongHieuRequest request);
     ThuongHieuResponse toThuongHieuResponse(ThuongHieu thuongHieu);
     void toUpdateThuongHieu(@MappingTarget ThuongHieu thuongHieu, ThuongHieuRequest request);
 
-
     //Mapper size
     Size toSize(SizeRequest request);
     SizeResponse toSizeResponse(Size size);
     void toUpdateSize(@MappingTarget Size size, SizeRequest request);
-
 
     //Mapper sản phẩm
     @Mapping(source = "thuongHieuId", target = "thuongHieu.id")
@@ -54,21 +49,27 @@ public interface ShoeMapper {
     @Mapping(target = "danhMuc.id", source = "danhMucId")
     void toUpdateSanPham(@MappingTarget SanPham sanPham, SanPhamRequest request);
 
-
-    //Mapper chi tiết sản phẩm
+    // Mapper chi tiết sản phẩm
     @Mapping(source = "sanPhamId", target = "sanPham.id")
     @Mapping(source = "mauSacId", target = "mauSac.id")
     @Mapping(source = "sizeId", target = "size.id")
     @Mapping(source = "chatLieuId", target = "chatLieu.id")
     @Mapping(source = "deGiayId", target = "deGiay.id")
     @Mapping(source = "tenChiTietSanPham", target = "tenChiTietSanPham")
+    @Mapping(source = "hinhAnh", target = "hinhAnh")
     ChiTietSanPham toChiTietSanPham(ChiTietSanPhamRequest request);
+
+    @Mapping(source = "sanPham.tenSanPham", target = "sanPhamTen")
+    @Mapping(source = "mauSac.tenMauSac", target = "mauSacTen")
+    @Mapping(source = "size.tenSize", target = "sizeTen")
+    @Mapping(source = "chatLieu.tenChatLieu", target = "chatLieuTen")
+    @Mapping(source = "deGiay.tenDeGiay", target = "deGiayTen")
     ChiTietSanPhamResponse toChiTietSanPhamResponse(ChiTietSanPham chiTietSanPham);
-    @Mapping(source = "sanPhamId", target = "sanPham.id")
-    @Mapping(source = "mauSacId", target = "mauSac.id")
-    @Mapping(source = "sizeId", target = "size.id")
-    @Mapping(source = "chatLieuId", target = "chatLieu.id")
-    @Mapping(source = "deGiayId", target = "deGiay.id")
-    @Mapping(source = "tenChiTietSanPham", target = "tenChiTietSanPham")
-    void toUpdateChiTietSanPham(@MappingTarget ChiTietSanPham chiTietSanPham, ChiTietSanPhamRequest request);
+    default String map(MultipartFile file) {
+        if (file != null && !file.isEmpty()) {
+            return file.getOriginalFilename();
+        }
+        return null;
+    }
+
 }

@@ -17,6 +17,7 @@ import SizeComponent from './component/Size/SizeComponent';
 import ListDeGiay from './component/DeGiay/ListDeGiay';
 import DeGiayComponent from './component/DeGiay/DeGiayComponent';
 import ListChiTietSanPham from './component/ChiTietSanPham/ListChiTietSanPham';
+import ChiTietSanPhamComponent from './component/ChiTietSanPham/ChiTietSanPhamComponent';
 
 function App() {
   return (
@@ -66,8 +67,9 @@ function App() {
             <Route path='/add-de-giay' element={<DeGiayComponent />} />
             <Route path='/update-de-giay/:id' element={<DeGiayComponent />} />
 
-            {/*Chi tiết sản phẩm */}
-            <Route path='/san-pham/:id/chi-tiet' element={<ListChiTietSanPham />} />
+            {/* Chi tiết sản phẩm */}
+            <Route path='/san-pham/:id' element={<ListChiTietSanPham />} />
+            <Route path='/add-chi-tiet-san-pham/:id' element={<ChiTietSanPhamComponent />} />
           </Routes>
         </div>
       </div>

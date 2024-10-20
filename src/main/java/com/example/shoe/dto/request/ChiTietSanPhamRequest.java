@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @AllArgsConstructor
@@ -18,8 +19,8 @@ public class ChiTietSanPhamRequest {
     @NotBlank(message = "Tên chi tiết sản phẩm không được để trống")
     String tenChiTietSanPham;
 
-    @NotBlank(message = "Hình ảnh không được để trống")
-    String hinhAnh;
+    @NotNull(message = "Hình ảnh không được để trống")
+    MultipartFile hinhAnh;
 
     @NotNull(message = "Số lượng tồn không được để trống")
     @Min(value = 0, message = "Số lượng tồn phải lớn hơn hoặc bằng 0")
@@ -46,6 +47,4 @@ public class ChiTietSanPhamRequest {
 
     @NotNull(message = "ID đế giày không được để trống")
     Integer deGiayId;
-
-//    Integer dotGiamGiaId;
 }

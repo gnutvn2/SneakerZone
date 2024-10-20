@@ -41,13 +41,6 @@ public class SanPhamServiceImpl implements SanPhamService {
         return sanPhamPage.map(shoeMapper::toSanPhamResponse);
     }
 
-//    @Override
-//    public Page<SanPhamResponse> getSanPhamByStatus(Boolean trangThai, Pageable pageable) {
-//        return sanPhamRepository.search(null, trangThai, pageable)
-//                .map(shoeMapper::toSanPhamResponse);
-//    }
-
-
     @Override
     public SanPhamResponse createSanPham(SanPhamRequest request) {
         SanPham sanPham = shoeMapper.toSanPham(request);

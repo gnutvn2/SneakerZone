@@ -1,5 +1,6 @@
 package com.example.shoe.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -22,5 +23,6 @@ public class MauSac {
     @Column(name = "ten_mau_sac")
     String tenMauSac;
     @OneToMany(mappedBy = "mauSac")
+    @JsonManagedReference
     List<ChiTietSanPham> listChiTietSanPham;
 }

@@ -33,6 +33,10 @@ const ListSanPhamComponent = () => {
         navigator(`/update-san-pham/${id}`);
     };
 
+    const viewChiTietSanPham = (id) => {
+        navigator(`/san-pham/${id}`);
+    };
+
     const handleNextPage = () => {
         if (currentPage < totalPages - 1) {
             setCurrentPage(prevPage => prevPage + 1);
@@ -162,7 +166,7 @@ const ListSanPhamComponent = () => {
                                             <button
                                                 className='btn btn-success'
                                                 style={{ marginLeft: '10px' }}
-                                                onClick={() => navigator(`/san-pham/${sanPham.id}/chi-tiet`)}>
+                                                onClick={() => viewChiTietSanPham(sanPham.id)}>
                                                 <i className="bi bi-eye"></i>
                                             </button>
                                         </td>

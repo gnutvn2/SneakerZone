@@ -10,33 +10,23 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChiTietSanPhamRepository extends JpaRepository<ChiTietSanPham, Integer> {
+    @Query("""
+            SELECT ctsp
+            FROM ChiTietSanPham ctsp
+            WHERE ctsp.sanPham.id = :sanPhamId
+            """)
+    Page<ChiTietSanPham> findBySanPhamId(@Param("sanPhamId") Integer id, Pageable pageable);
+
     //Tim kiem chi tiet san pham
     @Query("""
             SELECT ctsp FROM ChiTietSanPham ctsp
-            WHERE ctsp.maChiTietSanPham like %:keyword%
-            or ctsp.tenChiTietSanPham like %:keyword%
-            or ctsp.sanPham.tenSanPham like %:keyword%
-            or ctsp.mauSac.tenMauSac like %:keyword%
-            or ctsp.size.tenSize like %:keyword%
-            or ctsp.deGiay.tenDeGiay like %:keyword%
-            or ctsp.chatLieu.tenChatLieu like %:keyword%
+            WHERE ctsp.maChiTietSanPham LIKE %:keyword%
+            OR ctsp.tenChiTietSanPham LIKE %:keyword%
+            OR (ctsp.sanPham IS NOT NULL AND ctsp.sanPham.tenSanPham LIKE %:keyword%)
+            OR (ctsp.mauSac IS NOT NULL AND ctsp.mauSac.tenMauSac LIKE %:keyword%)
+            OR (ctsp.size IS NOT NULL AND ctsp.size.tenSize LIKE %:keyword%)
+            OR (ctsp.deGiay IS NOT NULL AND ctsp.deGiay.tenDeGiay LIKE %:keyword%)
+            OR (ctsp.chatLieu IS NOT NULL AND ctsp.chatLieu.tenChatLieu LIKE %:keyword%)
             """)
     Page<ChiTietSanPham> searchChiTietSanPham(@Param("keyword") String keyword, Pageable pageable);
-
-    // Lọc sản phẩm chi tiết
-    @Query("SELECT c FROM ChiTietSanPham c WHERE (:sanPhamId IS NULL OR c.sanPham.id = :sanPhamId) " +
-            "AND (:sizeId IS NULL OR c.size.id = :sizeId) " +
-            "AND (:mauSacId IS NULL OR c.mauSac.id = :mauSacId) " +
-            "AND (:chatLieuId IS NULL OR c.chatLieu.id = :chatLieuId) " +
-            "AND (:deGiayId IS NULL OR c.deGiay.id = :deGiayId) " +
-            "AND (:giaMin IS NULL OR c.gia >= :giaMin) " +
-            "AND (:giaMax IS NULL OR c.gia <= :giaMax)")
-    Page<ChiTietSanPham> locChiTietSanPham(@Param("sanPhamId") Integer sanPhamId,
-                                              @Param("sizeId") Integer sizeId,
-                                              @Param("mauSacId") Integer mauSacId,
-                                              @Param("chatLieuId") Integer chatLieuId,
-                                              @Param("giaMin") Double giaMin,
-                                              @Param("giaMax") Double giaMax,
-                                              @Param("deGiayId") Integer deGiayId,
-                                              Pageable pageable);
 }

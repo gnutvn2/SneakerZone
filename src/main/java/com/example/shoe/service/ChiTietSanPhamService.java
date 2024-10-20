@@ -5,10 +5,8 @@ import com.example.shoe.dto.response.ChiTietSanPhamResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
-
 public interface ChiTietSanPhamService {
-    Page<ChiTietSanPhamResponse> getAllChiTietSanPham(Pageable pageable);
+    Page<ChiTietSanPhamResponse> getAllChiTietSanPhamBySanPhamId(Integer id, Pageable pageable);
 
     ChiTietSanPhamResponse getChiTietSanPhamById(Integer id);
 
@@ -19,15 +17,4 @@ public interface ChiTietSanPhamService {
     void deleteChiTietSanPham(Integer id);
 
     Page<ChiTietSanPhamResponse> searchChiTietSanPham(String keyword, Pageable pageable);
-
-    Page<ChiTietSanPhamResponse> filterChiTietSanPham(String maChiTietSanPham,
-                                                      Optional<Integer> sanPhamId,
-                                                      Optional<Integer> sizeId,
-                                                      Optional<Integer> mauSacId,
-                                                      Optional<Integer> chatLieuId,
-                                                      Optional<Double> giaMin,
-                                                      Optional<Double> giaMax,
-                                                      Optional<Integer> deGiayId,
-                                                      Pageable pageable);
-
 }
