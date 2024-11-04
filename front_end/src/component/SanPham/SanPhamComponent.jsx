@@ -33,7 +33,6 @@ const SanPhamComponent = () => {
 
     if (id) {
       getSanPham(id)
-
         .then(response => {
           const { maSanPham, tenSanPham, moTa, trangThai, ngayTao, thuongHieuId, danhMucId } = response.data;
           setMaSanPham(maSanPham);

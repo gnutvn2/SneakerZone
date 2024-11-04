@@ -13,6 +13,7 @@ const SizeComponent = () => {
   useEffect(() => {
     if (id) {
       getOneSize(id).then((response) => {
+        console.log(response.data);
         const { maSize, tenSize } = response.data;
         setMaSize(maSize);
         setTenSize(tenSize);

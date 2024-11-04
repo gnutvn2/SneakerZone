@@ -73,7 +73,7 @@ const ListSanPhamComponent = () => {
     return (
         <div className='container'>
             <h5>Sản phẩm</h5>
-            <div className='card'>
+            <div className='card mb-5'>
                 <div className='card-body'>
                     <div className='d-flex justify-content-between mb-3'>
                         <div>

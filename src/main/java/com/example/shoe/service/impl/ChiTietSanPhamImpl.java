@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
+
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
@@ -35,22 +37,22 @@ public class ChiTietSanPhamImpl implements ChiTietSanPhamService {
     DeGiayRepository deGiayRepository;
 
     @Override
-    public Page<ChiTietSanPhamResponse> getAllChiTietSanPhamBySanPhamId(Integer id, Pageable pageable) {
-        Page<ChiTietSanPham> chiTietSanPhamPage = chiTietSanPhamRepository.findBySanPhamId(id, pageable);
+    public Page<ChiTietSanPhamResponse> getAllChiTietSanPhamBySanPhamId(Integer sanPhamId, Pageable pageable) {
+        Page<ChiTietSanPham> chiTietSanPhamPage = chiTietSanPhamRepository.findBySanPhamId(sanPhamId, pageable);
         Page<ChiTietSanPhamResponse> responsePage =
                 chiTietSanPhamPage.map(chiTietSanPham -> shoeMapper.toChiTietSanPhamResponse(chiTietSanPham));
         return responsePage;
     }
 
     @Override
-    public ChiTietSanPhamResponse getChiTietSanPhamById(Integer id) {
-        ChiTietSanPham chiTietSanPham = chiTietSanPhamRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(id + " chi tiết sản phẩm không tồn tại!"));
+    public ChiTietSanPhamResponse getChiTietSanPhamByIdAndSanPhamId(Integer chiTietSanPhamId, Integer sanPhamId) {
+        ChiTietSanPham chiTietSanPham = chiTietSanPhamRepository.findByIdAndSanPhamId(chiTietSanPhamId, sanPhamId)
+                .orElseThrow(() -> new RuntimeException("Chi tiết sản phẩm không tồn tại với ID chi tiết: " + chiTietSanPhamId + " và ID sản phẩm: " + sanPhamId));
         return shoeMapper.toChiTietSanPhamResponse(chiTietSanPham);
     }
 
     @Override
-    public ChiTietSanPhamResponse createChiTietSanPham(ChiTietSanPhamRequest request) {
+    public ChiTietSanPhamResponse createChiTietSanPhamBySanPhamId(Integer sanPhamId, ChiTietSanPhamRequest request) {
         String imageUrl = "";
         try {
             Map<?, ?> uploadResult = cloudinary.uploader().upload(request.getHinhAnh().getBytes(), ObjectUtils.emptyMap());
@@ -60,35 +62,46 @@ public class ChiTietSanPhamImpl implements ChiTietSanPhamService {
             throw new RuntimeException("Upload hình ảnh thất bại!", e);
         }
 
+        Optional<SanPham> sanPhamOptional = sanPhamRepository.findById(sanPhamId);
+        if (!sanPhamOptional.isPresent()) {
+            throw new RuntimeException("Sản phẩm không tồn tại với ID: " + sanPhamId);
+        }
+
         ChiTietSanPham chiTietSanPham = shoeMapper.toChiTietSanPham(request);
         chiTietSanPham.setHinhAnh(imageUrl);
-
+        chiTietSanPham.setSanPham(sanPhamOptional.get());
         chiTietSanPham = chiTietSanPhamRepository.save(chiTietSanPham);
 
         return shoeMapper.toChiTietSanPhamResponse(chiTietSanPham);
     }
 
     @Override
-    public ChiTietSanPhamResponse updateChiTietSanPham(Integer id, ChiTietSanPhamRequest request) {
-        logger.info("Cập nhật chi tiết sản phẩm với ID: " + id);
-        ChiTietSanPham chiTietSanPham = chiTietSanPhamRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Chi tiết sản phẩm không tồn tại!"));
+    public ChiTietSanPhamResponse updateChiTietSanPhamBySanPhamId(Integer sanPhamId, Integer chiTietSanPhamId, ChiTietSanPhamRequest request, MultipartFile hinhAnh) {
+        logger.info("Cập nhật chi tiết sản phẩm với ID: " + chiTietSanPhamId + " của sản phẩm ID: " + sanPhamId);
 
-        if (!request.getTenChiTietSanPham().equals(chiTietSanPham.getTenChiTietSanPham())) {
-            chiTietSanPham.setTenChiTietSanPham(request.getTenChiTietSanPham());
+        SanPham sanPham = sanPhamRepository.findById(sanPhamId)
+                .orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại với ID: " + sanPhamId));
+
+        ChiTietSanPham chiTietSanPham = chiTietSanPhamRepository.findById(chiTietSanPhamId)
+                .orElseThrow(() -> new RuntimeException("Chi tiết sản phẩm không tồn tại với ID: " + chiTietSanPhamId));
+
+        if (!chiTietSanPham.getSanPham().getId().equals(sanPhamId)) {
+            throw new RuntimeException("Chi tiết sản phẩm không thuộc về sản phẩm ID: " + sanPhamId);
         }
 
-        if (request.getHinhAnh() != null && !request.getHinhAnh().isEmpty()) {
-            logger.info("Đang cập nhật hình ảnh mới cho sản phẩm với ID: " + id);
-            String hinhAnhUrl = uploadImage(request.getHinhAnh());
-            chiTietSanPham.setHinhAnh(hinhAnhUrl);
+        // Kiểm tra xem có hình ảnh mới không
+        if (hinhAnh != null && !hinhAnh.isEmpty()) {
+            String imageUrl = uploadImage(hinhAnh);
+            chiTietSanPham.setHinhAnh(imageUrl);
         }
 
+        // Cập nhật các thông tin khác
         updateChiTietSanPhamDetails(chiTietSanPham, request);
 
         chiTietSanPham = chiTietSanPhamRepository.save(chiTietSanPham);
         return shoeMapper.toChiTietSanPhamResponse(chiTietSanPham);
     }
+
 
     private void updateChiTietSanPhamDetails(ChiTietSanPham chiTietSanPham, ChiTietSanPhamRequest request) {
         chiTietSanPham.setSanPham(sanPhamRepository.findById(request.getSanPhamId())
@@ -124,31 +137,40 @@ public class ChiTietSanPhamImpl implements ChiTietSanPhamService {
     }
 
     @Override
-    public void deleteChiTietSanPham(Integer id) {
-        logger.info("Đang xóa chi tiết sản phẩm với ID: " + id);
-        if (!chiTietSanPhamRepository.existsById(id)) {
-            throw new RuntimeException("Chi tiết sản phẩm không tồn tại");
+    public void deleteChiTietSanPhamBySanPhamId(Integer sanPhamId, Integer chiTietSanPhamId) {
+        logger.info("Đang xóa chi tiết sản phẩm với chiTietSanPhamId: " + chiTietSanPhamId + " và sanPhamId: " + sanPhamId);
+
+        Optional<SanPham> sanPhamOptional = sanPhamRepository.findById(sanPhamId);
+        if (!sanPhamOptional.isPresent()) {
+            throw new RuntimeException("Sản phẩm không tồn tại với ID: " + sanPhamId);
         }
+
+        Optional<ChiTietSanPham> chiTietSanPhamOptional = chiTietSanPhamRepository.findByIdAndSanPhamId(chiTietSanPhamId, sanPhamId);
+        if (!chiTietSanPhamOptional.isPresent()) {
+            throw new RuntimeException("Chi tiết sản phẩm không tồn tại hoặc không thuộc sản phẩm với ID: " + sanPhamId);
+        }
+
         try {
-            chiTietSanPhamRepository.deleteById(id);
-            logger.info("Đã xóa chi tiết sản phẩm với ID: " + id);
+            chiTietSanPhamRepository.deleteById(chiTietSanPhamId);
+            logger.info("Đã xóa chi tiết sản phẩm với chiTietSanPhamId: " + chiTietSanPhamId);
         } catch (DataIntegrityViolationException e) {
-            logger.error("Không thể xóa chi tiết sản phẩm với ID: " + id + " do ràng buộc dữ liệu.", e);
+            logger.error("Không thể xóa chi tiết sản phẩm với chiTietSanPhamId: " + chiTietSanPhamId + " do ràng buộc dữ liệu.", e);
             throw new DataIntegrityViolationException("Không thể xóa chi tiết sản phẩm do có liên kết với dữ liệu khác.", e);
         } catch (Exception e) {
-            logger.error("Lỗi khi xóa chi tiết sản phẩm với ID: " + id, e);
+            logger.error("Lỗi khi xóa chi tiết sản phẩm với chiTietSanPhamId: " + chiTietSanPhamId, e);
             throw new RuntimeException("Đã xảy ra lỗi khi xóa chi tiết sản phẩm.", e);
         }
     }
 
-
     @Override
-    public Page<ChiTietSanPhamResponse> searchChiTietSanPham(String keyword, Pageable pageable) {
+    public Page<ChiTietSanPhamResponse> searchChiTietSanPham(Integer sanPhamId, String keyword, Pageable pageable) {
         if (keyword == null || keyword.trim().isEmpty()) {
-            return chiTietSanPhamRepository.findAll(pageable)
+            return chiTietSanPhamRepository.findBySanPhamId(sanPhamId, pageable)
                     .map(shoeMapper::toChiTietSanPhamResponse);
         }
-        return chiTietSanPhamRepository.searchChiTietSanPham(keyword.trim(), pageable)
+        return chiTietSanPhamRepository.searchChiTietSanPhamBySanPhamId(sanPhamId, keyword.trim(), pageable)
                 .map(shoeMapper::toChiTietSanPhamResponse);
     }
+
+
 }

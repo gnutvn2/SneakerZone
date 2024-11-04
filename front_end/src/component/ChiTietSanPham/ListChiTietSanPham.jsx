@@ -1,33 +1,58 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { listChiTietSanPhamBySanPhamId } from '../../service/ChiTietSanPham';
+import {
+    getAllChiTietSanPhamBySanPhamId,
+    searchChiTietSanPham,
+    deleteChiTietSanPham
+} from '../../service/ChiTietSanPham';
 
 const ListChiTietSanPhamComponent = () => {
-    const { id } = useParams();
+    const { sanPhamId } = useParams();
+    console.log("ID san pham o list chi tiet san pham: " + sanPhamId);
+    
     const [chiTietSanPham, setChiTietSanPham] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+    const [searchKeyword, setSearchKeyword] = useState("");
     const itemsPerPage = 5;
     const navigate = useNavigate();
 
     const getChiTietSanPham = () => {
         const pageable = {
             page: currentPage,
-            size: itemsPerPage
+            size: itemsPerPage,
         };
 
-        listChiTietSanPhamBySanPhamId(pageable, id)
+        getAllChiTietSanPhamBySanPhamId(sanPhamId, pageable)
             .then(response => {
-                console.log(response.data); // Kiểm tra dữ liệu trả về
                 setChiTietSanPham(response.data.content);
                 setTotalPages(response.data.totalPages);
             })
             .catch(error => console.error('Error fetching product details:', error));
     };
 
+    // Hàm tìm kiếm chi tiết sản phẩm theo từ khóa
+    const handleSearch = () => {
+        const pageable = {
+            page: currentPage,
+            size: itemsPerPage,
+        };
+
+        searchChiTietSanPham(sanPhamId, searchKeyword, pageable)
+            .then(response => {
+                setChiTietSanPham(response.data.content);
+                setTotalPages(response.data.totalPages);
+            })
+            .catch(error => console.error('Error searching product details:', error));
+    };
+
     useEffect(() => {
-        getChiTietSanPham();
-    }, [currentPage, id]);
+        if (searchKeyword) {
+            handleSearch();
+        } else {
+            getChiTietSanPham();
+        }
+    }, [currentPage, sanPhamId, searchKeyword]);
 
     const handleNextPage = () => {
         if (currentPage < totalPages - 1) {
@@ -41,20 +66,33 @@ const ListChiTietSanPhamComponent = () => {
         }
     };
 
+    // Hàm điều hướng đến trang thêm chi tiết sản phẩm
     const createChiTietSanPham = () => {
-        navigate(`/add-chi-tiet-san-pham/${id}`)
-    }
+        navigate(`/san-pham/${sanPhamId}/add-chi-tiet`)
+    };
+
+    const handleSearchChange = (e) => {
+        setSearchKeyword(e.target.value);
+    };
+
+    const handleDelete = (chitietSanPhamId) => {
+        if (window.confirm("Bạn có chắc chắn muốn xóa chi tiết sản phẩm này?")) {
+            deleteChiTietSanPham(sanPhamId ,chitietSanPhamId )
+                .then(() => {
+                    getChiTietSanPham();
+                })
+                .catch(error => console.error('Error deleting product detail:', error));
+        }
+    };
 
     return (
         <div className="container">
             <h5>Chi tiết sản phẩm</h5>
-            <div className="card">
+            <div className="card mb-5">
                 <div className="card-body">
-                <div className='d-flex justify-content-between mb-3'>
+                    <div className='d-flex justify-content-between mb-3'>
                         <div>
-                            <button className='btn btn-outline-success me-2' 
-                                onClick={createChiTietSanPham}
-                                >
+                            <button className='btn btn-outline-success me-2' onClick={createChiTietSanPham}>
                                 <i className='bi bi-plus-circle'></i> Thêm mới
                             </button>
                         </div>
@@ -64,6 +102,9 @@ const ListChiTietSanPhamComponent = () => {
                                     type="text"
                                     className="form-control"
                                     placeholder="Tìm kiếm sản phẩm"
+                                    value={searchKeyword}
+                                    onChange={handleSearchChange}
+                                    onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                                 />
                             </div>
                         </div>
@@ -78,7 +119,7 @@ const ListChiTietSanPhamComponent = () => {
                                 <th>Chất liệu</th>
                                 <th>Đế giày</th>
                                 <th>Hình ảnh</th>
-                                <th>Số lượng tồn</th>
+                                <th>Tồn kho</th>
                                 <th>Giá bán</th>
                                 <th>Trạng thái</th>
                                 <th>Chức năng</th>
@@ -100,8 +141,22 @@ const ListChiTietSanPhamComponent = () => {
                                             ) : 'Không có'}
                                         </td>
                                         <td>{ctsp.soLuongTon}</td>
-                                        <td>{ctsp.gia} vnđ </td>
+                                        <td>{ctsp.gia} VNĐ</td>
                                         <td>{ctsp.trangThai ? 'Còn hàng' : 'Hết hàng'}</td>
+                                        <td>
+                                            <button
+                                                className='btn btn-warning'
+                                                onClick={() => navigate(`/san-pham/${sanPhamId}/chi-tiet/${ctsp.id}`)}
+                                            >
+                                                <i className='bi bi-pencil-square'></i>
+                                            </button>
+                                            <button
+                                                className='btn btn-danger ms-2'
+                                                onClick={() => handleDelete(ctsp.id)}
+                                            >
+                                                <i className='bi bi-trash'></i>
+                                            </button>
+                                        </td>
                                     </tr>
                                 ))
                             ) : (
@@ -110,31 +165,26 @@ const ListChiTietSanPhamComponent = () => {
                                 </tr>
                             )}
                         </tbody>
-
                     </table>
 
                     {/* Nút phân trang */}
-                    <div className="d-flex justify-content-between align-items-center my-3">
-                        <div>
-                            <button className='btn btn-outline-primary' onClick={() => navigate("/san-pham")}>Quay lại</button>
-                        </div>
-                        <div className="d-flex align-items-center mx-auto">
-                            <button
-                                className="btn btn-outline-primary me-2"
-                                disabled={currentPage === 0}
-                                onClick={handlePreviousPage}>
-                                Pre
-                            </button>
-                            <span className="align-self-center">Trang {currentPage + 1} / {totalPages}</span>
-                            <button
-                                className="btn btn-outline-primary ms-2"
-                                disabled={currentPage + 1 >= totalPages}
-                                onClick={handleNextPage}>
-                                Next
-                            </button>
-                        </div>
+                    <div className="d-flex justify-content-center align-items-center my-3">
+                        <button
+                            className="btn btn-outline-primary me-2"
+                            disabled={currentPage === 0}
+                            onClick={handlePreviousPage}>
+                            Pre
+                        </button>
+                        <span className="align-self-center">Trang {currentPage + 1} / {totalPages}</span>
+                        <button
+                            className="btn btn-outline-primary ms-2"
+                            disabled={currentPage + 1 >= totalPages}
+                            onClick={handleNextPage}>
+                            Next
+                        </button>
                     </div>
 
+                    <button className='btn btn-outline-primary' onClick={() => navigate("/san-pham")}>Quay lại</button>
                 </div>
             </div>
         </div>

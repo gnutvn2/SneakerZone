@@ -18,6 +18,12 @@ import ListDeGiay from './component/DeGiay/ListDeGiay';
 import DeGiayComponent from './component/DeGiay/DeGiayComponent';
 import ListChiTietSanPham from './component/ChiTietSanPham/ListChiTietSanPham';
 import ChiTietSanPhamComponent from './component/ChiTietSanPham/ChiTietSanPhamComponent';
+import ListVaiTro from './component/VaiTro/ListVaitro';
+import VaiTroComponent from './component/VaiTro/VaiTroComponent';
+import ListNhanVien from './component/NhanVien/ListNhanVien';
+import NhanVienComponent from './component/NhanVien/NhanVienComponent';
+import ListKhachHang from './component/KhachHang/ListKhachHang';
+import KhachHangComponent from './component/KhachHang/KhachHangComponent';
 
 function App() {
   return (
@@ -68,8 +74,24 @@ function App() {
             <Route path='/update-de-giay/:id' element={<DeGiayComponent />} />
 
             {/* Chi tiết sản phẩm */}
-            <Route path='/san-pham/:id' element={<ListChiTietSanPham />} />
-            <Route path='/add-chi-tiet-san-pham/:id' element={<ChiTietSanPhamComponent />} />
+            <Route path='/san-pham/:sanPhamId' element={<ListChiTietSanPham />} />
+            <Route path='/san-pham/:sanPhamId/add-chi-tiet' element={<ChiTietSanPhamComponent />} />
+            <Route path='/san-pham/:sanPhamId/chi-tiet/:chiTietSanPhamId' element={<ChiTietSanPhamComponent />} />
+
+            {/*Vai trò */}
+            <Route path='/vai-tro' element={<ListVaiTro />} />
+            <Route path='/add-vai-tro' element={<VaiTroComponent />} />
+            <Route path='/update-vai-tro/:id' element={<VaiTroComponent />} />
+
+            {/*Nhân viên */}
+            <Route path='/nhan-vien' element={<ListNhanVien />} />
+            <Route path='/add-nhan-vien' element={<NhanVienComponent />} />
+            <Route path='/update-nhan-vien/:id' element={<NhanVienComponent />} />
+
+            {/*Khách hàng */}
+            <Route path='/khach-hang' element={<ListKhachHang />} />
+            <Route path='/add-khach-hang' element={<KhachHangComponent />} />
+            <Route path='/update-khach-hang/:id' element={<KhachHangComponent />} />
           </Routes>
         </div>
       </div>

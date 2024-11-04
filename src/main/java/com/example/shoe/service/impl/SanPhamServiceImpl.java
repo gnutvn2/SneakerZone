@@ -26,7 +26,7 @@ public class SanPhamServiceImpl implements SanPhamService {
     ThuongHieuRepository thuongHieuRepository;
     DanhMucRepository danhMucRepository;
 
-        @Override
+    @Override
     public Page<SanPhamResponse> getSanPhamByStatus(Boolean trangThai, Pageable pageable) {
         Page<SanPham> sanPhamPage;
 
@@ -44,8 +44,8 @@ public class SanPhamServiceImpl implements SanPhamService {
     @Override
     public SanPhamResponse createSanPham(SanPhamRequest request) {
         SanPham sanPham = shoeMapper.toSanPham(request);
-        sanPham = sanPhamRepository.save(sanPham);
-        return shoeMapper.toSanPhamResponse(sanPham);
+        SanPham saveSanPham = sanPhamRepository.save(sanPham);
+        return shoeMapper.toSanPhamResponse(saveSanPham);
     }
 
     @Override

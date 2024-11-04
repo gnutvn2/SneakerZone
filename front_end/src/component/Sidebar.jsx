@@ -73,7 +73,7 @@ const Sidebar = () => {
 
         {/* Trả hàng */}
         <li className='nav-item'>
-          <Link className='nav-link' to="/TraHang"><i className="bi bi-arrow-counterclockwise"></i>Trả hàng</Link>
+          <Link className='nav-link' to="/TraHang"><i className="bi bi-arrow-counterclockwise"></i>Trả hàng (Commingsoon)</Link>
         </li>
 
         {/* Giảm giá */}
@@ -81,7 +81,7 @@ const Sidebar = () => {
           className={`nav-item has-submenu ${activeSubmenu === 2 ? 'active' : ''}`}
           onClick={() => toggleSubmenu(2)}
         >
-          <Link className='nav-link' to="#"><i className="bi bi-percent"></i>Giảm giá</Link>
+          <Link className='nav-link' to="#"><i className="bi bi-percent"></i>Giảm giá (Commingsoon)</Link>
           <ul className='submenu'>
             <li className='nav-item'>
               <Link className='nav-link' to="/DotGiamGia"><i className="bi bi-calendar"></i>Đợt giảm giá</Link>
@@ -92,9 +92,23 @@ const Sidebar = () => {
           </ul>
         </li>
 
-        {/* Tài khoản */}
-        <li className='nav-item'>
-          <Link className='nav-link' to="/TaiKhoan"><i className="bi bi-person-circle"></i>Tài khoản</Link>
+        {/* Quản lý người dùng */}
+        <li
+          className={`nav-item has-submenu ${activeSubmenu === 3 ? 'active' : ''}`}
+          onClick={() => toggleSubmenu(3)}
+        >
+          <Link className='nav-link' to="#"><i className="bi bi-people"></i>Quản lý người dùng</Link>
+          <ul className='submenu'>
+            <li className='nav-item'>
+              <Link className='nav-link' to="/vai-tro"><i className="bi bi-shield-lock"></i>Vai trò</Link>
+            </li>
+            <li className='nav-item'>
+              <Link className='nav-link' to="/nhan-vien"><i className="bi bi-person-badge"></i>Nhân viên</Link>
+            </li>
+            <li className='nav-item'>
+              <Link className='nav-link' to="/khach-hang"><i className="bi bi-person"></i>Khách hàng</Link>
+            </li>
+          </ul>
         </li>
       </ul>
     </div>

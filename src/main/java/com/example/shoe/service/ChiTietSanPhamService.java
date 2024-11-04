@@ -4,17 +4,22 @@ import com.example.shoe.dto.request.ChiTietSanPhamRequest;
 import com.example.shoe.dto.response.ChiTietSanPhamResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface ChiTietSanPhamService {
-    Page<ChiTietSanPhamResponse> getAllChiTietSanPhamBySanPhamId(Integer id, Pageable pageable);
+    Page<ChiTietSanPhamResponse> getAllChiTietSanPhamBySanPhamId(Integer sanPhamId, Pageable pageable);
 
-    ChiTietSanPhamResponse getChiTietSanPhamById(Integer id);
+    ChiTietSanPhamResponse getChiTietSanPhamByIdAndSanPhamId(Integer chiTietSanPhamId, Integer sanPhamId);
 
-    ChiTietSanPhamResponse createChiTietSanPham(ChiTietSanPhamRequest request);
+    ChiTietSanPhamResponse createChiTietSanPhamBySanPhamId(Integer sanPhamId,ChiTietSanPhamRequest request);
 
-    ChiTietSanPhamResponse updateChiTietSanPham(Integer id, ChiTietSanPhamRequest request);
+    ChiTietSanPhamResponse updateChiTietSanPhamBySanPhamId(
+            Integer sanPhamId,
+            Integer ChiTietSanPhamId,
+            ChiTietSanPhamRequest request,
+            MultipartFile hinhAnh);
 
-    void deleteChiTietSanPham(Integer id);
+    void deleteChiTietSanPhamBySanPhamId(Integer sanPhamId, Integer chiTietSanPhamId);
 
-    Page<ChiTietSanPhamResponse> searchChiTietSanPham(String keyword, Pageable pageable);
+    Page<ChiTietSanPhamResponse> searchChiTietSanPham(Integer sanPhamId, String keyword, Pageable pageable);
 }

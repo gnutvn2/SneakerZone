@@ -30,7 +30,7 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Integer> {
             SELECT sp
             FROM SanPham sp
             WHERE (:trangThai IS NULL OR sp.trangThai = :trangThai)
-            AND (:keyword IS NULL OR :keyword = '' 
+            AND (:keyword IS NULL OR :keyword = ''
             OR sp.maSanPham LIKE %:keyword%
             OR sp.tenSanPham LIKE %:keyword%
             OR sp.danhMuc.tenDanhMuc LIKE %:keyword%

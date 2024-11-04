@@ -1,64 +1,60 @@
-import axios from "axios";
+import axios from 'axios';
 
-const apiChiTietSanPham = "http://localhost:8080/chi-tiet-san-pham";
+// URL cơ bản của API
+const BASE_URL = 'http://localhost:8080/chi-tiet-san-pham';
 
-// Hàm lấy danh sách chi tiết sản phẩm theo ID sản phẩm
-export const listChiTietSanPhamBySanPhamId = (pageable, sanPhamId) => {
-    return axios.get(`${apiChiTietSanPham}/san-pham/${sanPhamId}`, {
-        params: {
-            page: pageable.page,
-            size: pageable.size,
+// Hàm thêm chi tiết sản phẩm
+export const createChiTietSanPham = (sanPhamId, data) => {
+    return axios.post(`${BASE_URL}/san-pham/${sanPhamId}`, data, {
+        headers: {
+            'Content-Type': 'multipart/form-data', // Nếu bạn đang gửi dữ liệu form
         },
     });
-};
-
-// Hàm lấy chi tiết sản phẩm theo ID
-export const getChiTietSanPhamById = (id) => {
-    return axios.get(`${apiChiTietSanPham}/${id}`);
-};
-
-// Hàm tạo chi tiết sản phẩm
-export const createChiTietSanPham = (request) => {
-    return axios.post(apiChiTietSanPham, request);
 };
 
 // Hàm cập nhật chi tiết sản phẩm
-export const updateChiTietSanPham = (id, request) => {
-    return axios.put(`${apiChiTietSanPham}/${id}`, request);
-};
-
-// Hàm xóa chi tiết sản phẩm
-export const deleteChiTietSanPham = (id) => {
-    return axios.delete(`${apiChiTietSanPham}/${id}`);
-};
-
-// Hàm tìm kiếm chi tiết sản phẩm
-export const searchChiTietSanPham = (keyword, pageable) => {
-    return axios.get(`${apiChiTietSanPham}/search`, {
-        params: {
-            keyword: keyword,
-            page: pageable.page,
-            size: pageable.size,
+export const updateChiTietSanPham = (sanPhamId, chiTietSanPhamId, data) => {
+    return axios.put(`${BASE_URL}/san-pham/${sanPhamId}/chi-tiet/${chiTietSanPhamId}`, data, {
+        headers: {
+            'Content-Type': 'multipart/form-data', // Nếu bạn đang gửi dữ liệu form
         },
     });
 };
 
-export const getSanPham = () => {
-    return axios.get('http://localhost:8080/san-pham');
-}
+// Hàm xóa chi tiết sản phẩm
+export const deleteChiTietSanPham = (sanPhamId, chiTietSanPhamId) => {
+    return axios.delete(`${BASE_URL}/san-pham/${sanPhamId}/chi-tiet/${chiTietSanPhamId}`);
+};
+
+// Hàm lấy chi tiết sản phẩm
+export const getChiTietSanPhamById = (sanPhamId, chiTietSanPhamId) => {
+    return axios.get(`${BASE_URL}/san-pham/${sanPhamId}/chi-tiet/${chiTietSanPhamId}`);
+};
+
+// Hàm lấy danh sách chi tiết sản phẩm
+export const getAllChiTietSanPhamBySanPhamId = (sanPhamId, pageable) => {
+    return axios.get(`${BASE_URL}/san-pham/${sanPhamId}`, { params: pageable });
+};
+
+// Hàm tìm kiếm chi tiết sản phẩm
+export const searchChiTietSanPham = (sanPhamId, keyword, pageable) => {
+    return axios.get(`${BASE_URL}/search`, {
+        params: { sanPhamId, keyword, ...pageable }
+    });
+};
 
 export const getMauSac = () => {
-    return axios.get('http://localhost:8080/mau-sac');
-}
-
+    return axios.get("http://localhost:8080/mau-sac")
+};
+export const getSanPham = () => {
+    return axios.get("http://localhost:8080/san-pham")
+};
 export const getSize = () => {
-    return axios.get('http://localhost:8080/size');
-}
-
+    return axios.get("http://localhost:8080/size")
+};
 export const getChatLieu = () => {
-    return axios.get('http://localhost:8080/chat-lieu');
-}
-
+    return axios.get("http://localhost:8080/chat-lieu")
+};
 export const getDeGiay = () => {
-    return axios.get('http://localhost:8080/de-giay');
-}
+    return axios.get("http://localhost:8080/de-giay")
+};

@@ -1,0 +1,19 @@
+package com.example.shoe.dto.request;
+
+import jakarta.validation.constraints.NotBlank;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.FieldDefaults;
+
+@Setter
+@Getter
+@Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class VaiTroRequest {
+    @NotBlank(message = "Mã vai trò không được để trống")
+    String maVaiTro;
+    @NotBlank(message = "Tên vai trò không được để trống")
+    String tenVaiTro;
+}

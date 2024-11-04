@@ -1,5 +1,6 @@
 package com.example.shoe.dto.request;
 
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,8 +20,7 @@ public class ChiTietSanPhamRequest {
     @NotBlank(message = "Tên chi tiết sản phẩm không được để trống")
     String tenChiTietSanPham;
 
-    @NotNull(message = "Hình ảnh không được để trống")
-    MultipartFile hinhAnh;
+    MultipartFile  hinhAnh;
 
     @NotNull(message = "Số lượng tồn không được để trống")
     @Min(value = 0, message = "Số lượng tồn phải lớn hơn hoặc bằng 0")
@@ -36,15 +36,15 @@ public class ChiTietSanPhamRequest {
     @NotNull(message = "ID sản phẩm không được để trống")
     Integer sanPhamId;
 
-    @NotNull(message = "ID màu sắc không được để trống")
+    @NotNull(message = "Màu sắc không được để trống")
     Integer mauSacId;
 
-    @NotNull(message = "ID size không được để trống")
+    @NotNull(message = "Size không được để trống")
     Integer sizeId;
 
-    @NotNull(message = "ID chất liệu không được để trống")
+    @NotNull(message = "Chất liệu không được để trống")
     Integer chatLieuId;
 
-    @NotNull(message = "ID đế giày không được để trống")
+    @NotNull(message = "Đế giày không được để trống")
     Integer deGiayId;
 }
