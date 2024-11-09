@@ -65,4 +65,20 @@ public class KhachHangServiceImpl implements KhachHangService {
         khachHangRepository.deleteById(khachHangId);
         return true;
     }
+
+    public KhachHang getOrCreateKhachLe() {
+        return khachHangRepository.findByHoTen("Khách lẻ")
+                .orElseGet(() -> {
+                    KhachHang khachLe = new KhachHang();
+                    khachLe.setMaKhachHang("N/A");
+                    khachLe.setHoTen("Khách lẻ");
+                    khachLe.setGioiTinh(true);
+                    khachLe.setSoDienThoai("N/A");
+                    khachLe.setMatKhau("N/A");
+                    khachLe.setEmail("khachLe@gmail.com");
+                    khachLe.setDiaChi("N/A");
+                    return khachHangRepository.save(khachLe);
+                });
+    }
+
 }

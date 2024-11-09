@@ -14,7 +14,6 @@ const ChiTietSanPhamComponent = () => {
   const { chiTietSanPhamId, sanPhamId } = useParams();
   const navigate = useNavigate();
 
-  // Khởi tạo state cho các trường dữ liệu
   const [formData, setFormData] = useState({
     maChiTietSanPham: '',
     tenChiTietSanPham: '',
@@ -112,7 +111,7 @@ const ChiTietSanPhamComponent = () => {
 
     try {
       await apiCall();
-      navigate('/san-pham');
+      navigate(`/san-pham/${formData.sanPhamId}`)
     } catch (error) {
       if (error.response && error.response.data) {
         setErrors(error.response.data);

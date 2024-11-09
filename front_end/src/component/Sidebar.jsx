@@ -29,12 +29,12 @@ const Sidebar = () => {
 
         {/* Bán hàng tại quầy */}
         <li className='nav-item'>
-          <Link className='nav-link' to="/BanHangTaiQuay"> <i className="bi bi-shop"></i>Bán hàng tại quầy</Link>
+          <Link className='nav-link' to="/ban-hang"> <i className="bi bi-shop"></i>Bán hàng tại quầy</Link>
         </li>
 
         {/* Quản lý đơn hàng */}
         <li className='nav-item'>
-          <Link className='nav-link' to="/DonHang"><i className="bi bi-card-checklist"></i>Đơn hàng</Link>
+          <Link className='nav-link' to="/don-hang"><i className="bi bi-card-checklist"></i>Đơn hàng</Link>
         </li>
 
         {/* Quản lý sản phẩm */}
@@ -60,13 +60,10 @@ const Sidebar = () => {
               <Link className='nav-link' to="/chat-lieu"><i class="bi bi-grid"></i>Chất liệu</Link>
             </li>
             <li className='nav-item'>
-              <Link className='nav-link' to="/size"><i class="bi bi-arrows-fullscreen"></i>
-              Size</Link>
+              <Link className='nav-link' to="/size"><i class="bi bi-arrows-fullscreen"></i>Size</Link>
             </li>
             <li className='nav-item'>
-              <Link className='nav-link' to="/de-giay"><i class="bi bi-layers"></i>
-
-              Đế giày</Link>
+              <Link className='nav-link' to="/de-giay"><i class="bi bi-layers"></i>Đế giày</Link>
             </li>
           </ul>
         </li>

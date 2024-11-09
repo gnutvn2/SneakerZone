@@ -1,6 +1,5 @@
 package com.example.shoe.dto.request;
 
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

@@ -24,6 +24,8 @@ import ListNhanVien from './component/NhanVien/ListNhanVien';
 import NhanVienComponent from './component/NhanVien/NhanVienComponent';
 import ListKhachHang from './component/KhachHang/ListKhachHang';
 import KhachHangComponent from './component/KhachHang/KhachHangComponent';
+import ListHoaDon from './component/HoaDon/ListHoaDon';
+import BanHang from './component/BanHang/BanHang';
 
 function App() {
   return (
@@ -92,6 +94,12 @@ function App() {
             <Route path='/khach-hang' element={<ListKhachHang />} />
             <Route path='/add-khach-hang' element={<KhachHangComponent />} />
             <Route path='/update-khach-hang/:id' element={<KhachHangComponent />} />
+
+            {/*Hóa đơn */}
+            <Route path='/don-hang' element={<ListHoaDon />} />
+
+            {/*Bán hàng */}
+            <Route path='/ban-hang' element={<BanHang />} />
           </Routes>
         </div>
       </div>

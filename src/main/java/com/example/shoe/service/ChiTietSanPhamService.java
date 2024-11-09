@@ -22,4 +22,5 @@ public interface ChiTietSanPhamService {
     void deleteChiTietSanPhamBySanPhamId(Integer sanPhamId, Integer chiTietSanPhamId);
 
     Page<ChiTietSanPhamResponse> searchChiTietSanPham(Integer sanPhamId, String keyword, Pageable pageable);
+    Page<ChiTietSanPhamResponse> getAll(Boolean trangThai, String keyword, Pageable pageable);
 }

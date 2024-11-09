@@ -118,11 +118,17 @@ public interface ShoeMapper {
     @Mapping(source = "khachHangId", target = "khachHang.id")
     HoaDon toHoaDon(HoaDonRequest request);
 
+    @Mapping(source = "nhanVien.hoTen", target = "tenNhanVien")
+    @Mapping(source = "khachHang.hoTen", target = "tenKhachHang")
     HoaDonResponse toHoaDonResponse(HoaDon hoaDon);
 
-    @Mapping(target = "nhanVien.id", source = "nhanVienId")
-    @Mapping(target = "khachHang.id", source = "khachHangId")
-    void toUpdateHoaDon(@MappingTarget HoaDon hoaDon, HoaDonRequest request);
-
     //Mapper chi tiết hóa đơn
+    @Mapping(source = "chiTietSanPhamId", target = "chiTietSanPham.id")
+    @Mapping(source = "hoaDonId", target = "hoaDon.id")
+    ChiTietHoaDon toChiTietHoaDon(ChiTietHoaDonRequest request);
+
+    @Mapping(source = "chiTietSanPham.maChiTietSanPham", target = "maChiTietSanPham")
+    @Mapping(source = "chiTietSanPham.tenChiTietSanPham", target = "tenChiTietSanPham")
+    @Mapping(source = "hoaDon.maHoaDon", target = "maHoaDon")
+    ChiTietHoaDonResponse toChiTietHoaDonResponse(ChiTietHoaDon chiTietHoaDon);
 }

@@ -125,6 +125,8 @@ create table hoa_don(
 	khach_hang_id int not null,
 	ngay_tao datetime not null,
 	tong_tien decimal(10,2) not null,
+	tien_thanh_toan decimal(10,2) not null,
+	tien_thua decimal(10,2) not null,
 	trang_thai nvarchar(50) not null,
 	foreign key (nhan_vien_id) references nhan_vien(id),
 	foreign key (khach_hang_id) references khach_hang(id)

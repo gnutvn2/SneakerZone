@@ -6,7 +6,6 @@ import lombok.experimental.FieldDefaults;
 
 @Setter
 @Getter
-@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class KhachHangRequest {
     @NotBlank(message = "Mã khách hàng không được để trống")

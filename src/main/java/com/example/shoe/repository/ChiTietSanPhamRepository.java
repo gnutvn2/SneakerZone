@@ -19,6 +19,7 @@ public interface ChiTietSanPhamRepository extends JpaRepository<ChiTietSanPham, 
             WHERE ctsp.sanPham.id = :sanPhamId
             """)
     Page<ChiTietSanPham> findBySanPhamId(@Param("sanPhamId") Integer sanPhamId, Pageable pageable);
+
     Optional<ChiTietSanPham> findByIdAndSanPhamId(Integer chiTietSanPhamId, Integer sanPhamId);
 
     @Query("""
@@ -37,5 +38,22 @@ public interface ChiTietSanPhamRepository extends JpaRepository<ChiTietSanPham, 
             @Param("sanPhamId") Integer sanPhamId,
             @Param("keyword") String keyword,
             Pageable pageable);
+
+    @Query("""
+        SELECT ctsp FROM ChiTietSanPham ctsp
+        WHERE ctsp.trangThai = :trangThai
+        AND (
+            ctsp.tenChiTietSanPham LIKE %:keyword% 
+            OR ctsp.mauSac.tenMauSac LIKE %:keyword%
+            OR ctsp.size.tenSize LIKE %:keyword%
+            OR ctsp.chatLieu.tenChatLieu LIKE %:keyword%
+            OR ctsp.deGiay.tenDeGiay LIKE %:keyword%
+        )
+    """)
+    Page<ChiTietSanPham> findByTrangThai(
+            @Param("trangThai") Boolean trangThai,
+            @Param("keyword") String keyword,
+            Pageable pageable);
+
 }
 

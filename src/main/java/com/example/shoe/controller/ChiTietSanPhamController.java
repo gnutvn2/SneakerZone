@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin("*")
@@ -34,8 +36,8 @@ public class ChiTietSanPhamController {
     public ResponseEntity<?> createChiTietSanPhamBySanPhamId(
             @PathVariable Integer sanPhamId,
             @Valid @ModelAttribute ChiTietSanPhamRequest request) {
-            ChiTietSanPhamResponse response = chiTietSanPhamService.createChiTietSanPhamBySanPhamId(sanPhamId, request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        ChiTietSanPhamResponse response = chiTietSanPhamService.createChiTietSanPhamBySanPhamId(sanPhamId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/san-pham/{sanPhamId}/chi-tiet/{chiTietSanPhamId}")
@@ -92,5 +94,12 @@ public class ChiTietSanPhamController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping
+    public ResponseEntity<?> getAll(
+            @RequestParam(value = "trangThai", required = false) Boolean trangThai,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(chiTietSanPhamService.getAll(trangThai, keyword, pageable));
+    }
 
 }

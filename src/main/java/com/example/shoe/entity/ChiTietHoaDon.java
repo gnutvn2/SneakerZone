@@ -23,9 +23,9 @@ public class ChiTietHoaDon {
     @Column(name = "tong_tien")
     Double tongTien;
     @ManyToOne
-    @Column(name = "chi_tiet_san_pham_id")
+    @JoinColumn(name = "chi_tiet_san_pham_id")
     ChiTietSanPham chiTietSanPham;
     @ManyToOne
-    @Column(name = "hoa_don_id")
+    @JoinColumn(name = "hoa_don_id")
     HoaDon hoaDon;
 }

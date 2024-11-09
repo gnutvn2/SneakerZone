@@ -5,19 +5,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
-
 @Setter
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class HoaDonResponse {
+public class ChiTietHoaDonResponse {
     Integer id;
-    String maHoaDon;
-    LocalDateTime ngayTao;
+    Double gia;
+    Integer soLuongMua;
     Double tongTien;
-    Double tienThanhToan;
-    Double tienThua;
-    String trangThai;
-    String tenNhanVien;
-    String tenKhachHang;
+    String maChiTietSanPham;
+    String tenChiTietSanPham;
+    String maHoaDon;
 }

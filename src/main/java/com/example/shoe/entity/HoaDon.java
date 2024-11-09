@@ -23,7 +23,11 @@ public class HoaDon {
     LocalDateTime ngayTao;
     @Column(name = "tong_tien")
     Double tongTien;
-    @Column(name = "trangThai")
+    @Column(name = "tien_thanh_toan")
+    Double tienThanhToan;
+    @Column(name = "tien_thua")
+    Double tienThua;
+    @Column(name = "trang_thai")
     String trangThai;
     @ManyToOne
     @JoinColumn(name = "nhan_vien_id")

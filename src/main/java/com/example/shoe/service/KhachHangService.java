@@ -2,6 +2,7 @@ package com.example.shoe.service;
 
 import com.example.shoe.dto.request.KhachHangRequest;
 import com.example.shoe.dto.response.KhachHangResponse;
+import com.example.shoe.entity.KhachHang;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,4 +12,5 @@ public interface KhachHangService {
     KhachHangResponse getOneKhachHang(Integer khachHangId);
     KhachHangResponse updateKhachHang(Integer khachHangId, KhachHangRequest request);
     Boolean deleteKhachHang(Integer khachHangId);
+    KhachHang getOrCreateKhachLe();
 }

@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
@@ -39,9 +40,7 @@ public class ChiTietSanPhamImpl implements ChiTietSanPhamService {
     @Override
     public Page<ChiTietSanPhamResponse> getAllChiTietSanPhamBySanPhamId(Integer sanPhamId, Pageable pageable) {
         Page<ChiTietSanPham> chiTietSanPhamPage = chiTietSanPhamRepository.findBySanPhamId(sanPhamId, pageable);
-        Page<ChiTietSanPhamResponse> responsePage =
-                chiTietSanPhamPage.map(chiTietSanPham -> shoeMapper.toChiTietSanPhamResponse(chiTietSanPham));
-        return responsePage;
+        return chiTietSanPhamPage.map(shoeMapper::toChiTietSanPhamResponse);
     }
 
     @Override
@@ -63,7 +62,7 @@ public class ChiTietSanPhamImpl implements ChiTietSanPhamService {
         }
 
         Optional<SanPham> sanPhamOptional = sanPhamRepository.findById(sanPhamId);
-        if (!sanPhamOptional.isPresent()) {
+        if (sanPhamOptional.isEmpty()) {
             throw new RuntimeException("Sản phẩm không tồn tại với ID: " + sanPhamId);
         }
 
@@ -141,12 +140,12 @@ public class ChiTietSanPhamImpl implements ChiTietSanPhamService {
         logger.info("Đang xóa chi tiết sản phẩm với chiTietSanPhamId: " + chiTietSanPhamId + " và sanPhamId: " + sanPhamId);
 
         Optional<SanPham> sanPhamOptional = sanPhamRepository.findById(sanPhamId);
-        if (!sanPhamOptional.isPresent()) {
+        if (sanPhamOptional.isEmpty()) {
             throw new RuntimeException("Sản phẩm không tồn tại với ID: " + sanPhamId);
         }
 
         Optional<ChiTietSanPham> chiTietSanPhamOptional = chiTietSanPhamRepository.findByIdAndSanPhamId(chiTietSanPhamId, sanPhamId);
-        if (!chiTietSanPhamOptional.isPresent()) {
+        if (chiTietSanPhamOptional.isEmpty()) {
             throw new RuntimeException("Chi tiết sản phẩm không tồn tại hoặc không thuộc sản phẩm với ID: " + sanPhamId);
         }
 
@@ -172,5 +171,10 @@ public class ChiTietSanPhamImpl implements ChiTietSanPhamService {
                 .map(shoeMapper::toChiTietSanPhamResponse);
     }
 
+    @Override
+    public Page<ChiTietSanPhamResponse> getAll(Boolean trangThai, String keyword, Pageable pageable) {
+        Page<ChiTietSanPham> chiTietSanPham = chiTietSanPhamRepository.findByTrangThai(trangThai, keyword, pageable);
+        return chiTietSanPham.map(shoeMapper::toChiTietSanPhamResponse);
+    }
 
 }
