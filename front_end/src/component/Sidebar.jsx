@@ -24,7 +24,7 @@ const Sidebar = () => {
       <ul>
         {/* Thống kê */}
         <li className='nav-item'>
-          <Link className='nav-link' to="/ThongKe"> <i className="bi bi-bar-chart-fill"></i>Thống kê</Link>
+          <Link className='nav-link' to="/thong-ke"> <i className="bi bi-bar-chart-fill"></i>Thống kê(Commingsoon)</Link>
         </li>
 
         {/* Bán hàng tại quầy */}
