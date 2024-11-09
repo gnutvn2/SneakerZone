@@ -34,7 +34,7 @@ const Sidebar = () => {
 
         {/* Quản lý đơn hàng */}
         <li className='nav-item'>
-          <Link className='nav-link' to="/don-hang"><i className="bi bi-card-checklist"></i>Đơn hàng</Link>
+          <Link className='nav-link' to="/lich-su-mua-hang"><i className="bi bi-card-checklist"></i>Lịch sử mua hàng</Link>
         </li>
 
         {/* Quản lý sản phẩm */}

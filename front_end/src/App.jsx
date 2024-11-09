@@ -95,11 +95,11 @@ function App() {
             <Route path='/add-khach-hang' element={<KhachHangComponent />} />
             <Route path='/update-khach-hang/:id' element={<KhachHangComponent />} />
 
-            {/*Hóa đơn */}
-            <Route path='/don-hang' element={<ListHoaDon />} />
-
             {/*Bán hàng */}
             <Route path='/ban-hang' element={<BanHang />} />
+
+            {/*Lịch sử mua hàng */}
+            <Route path='/lich-su-mua-hang' element={<ListHoaDon />} />
           </Routes>
         </div>
       </div>
