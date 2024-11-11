@@ -2,10 +2,12 @@ package com.example.shoe.service.impl;
 
 import com.example.shoe.dto.request.HoaDonRequest;
 import com.example.shoe.dto.response.HoaDonResponse;
+import com.example.shoe.entity.ChiTietHoaDon;
 import com.example.shoe.entity.HoaDon;
 import com.example.shoe.entity.KhachHang;
 import com.example.shoe.entity.NhanVien;
 import com.example.shoe.mapper.ShoeMapper;
+import com.example.shoe.repository.ChiTietHoaDonRepository;
 import com.example.shoe.repository.HoaDonRepository;
 import com.example.shoe.repository.KhachHangRepository;
 import com.example.shoe.repository.NhanVienRepository;
@@ -28,6 +30,7 @@ public class HoaDonServiceImpl implements HoaDonService {
     HoaDonRepository hoaDonRepository;
     NhanVienRepository nhanVienRepository;
     KhachHangRepository khachHangRepository;
+    ChiTietHoaDonRepository chiTietHoaDonRepository;
     KhachHangService khachHangService;
     ShoeMapper shoeMapper;
 

@@ -14,10 +14,10 @@ public class HoaDonResponse {
     Integer id;
     String maHoaDon;
     LocalDateTime ngayTao;
+    String tenNhanVien;
+    String tenKhachHang;
     Double tongTien;
     Double tienThanhToan;
     Double tienThua;
     String trangThai;
-    String tenNhanVien;
-    String tenKhachHang;
 }
