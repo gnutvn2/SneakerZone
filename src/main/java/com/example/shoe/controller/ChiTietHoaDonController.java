@@ -31,6 +31,23 @@ public class ChiTietHoaDonController {
         return ResponseEntity.status(HttpStatus.CREATED).body(chiTietHoaDonService.createChiTietHoaDon(request));
     }
 
+    @PutMapping("/update-so-luong/{chiTietHoaDonId}")
+    public ResponseEntity<?> updateSoLuong(
+            @PathVariable("chiTietHoaDonId") Integer chiTietHoaDonId,
+            @RequestBody Integer soLuongMua) {
+        if (soLuongMua == null || soLuongMua < 1) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Số lượng mua phải lớn hơn hoặc bằng 1");
+        }
+
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(chiTietHoaDonService.updateSoLuong(chiTietHoaDonId, soLuongMua));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Cập nhật số lượng thất bại do lỗi hệ thống");
+        }
+    }
+
     @DeleteMapping("/{chiTietHoaDonId}")
     public ResponseEntity<?> deleteChiTietHoaDon(@PathVariable("chiTietHoaDonId") Integer chiTietHoaDonId) {
         chiTietHoaDonService.deleteChiTietHoaDon(chiTietHoaDonId);

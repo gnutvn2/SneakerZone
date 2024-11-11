@@ -6,7 +6,8 @@ import {
     listChiTietHoaDonByHoaDonId,
     createChiTietHoaDon,
     deleteChiTietHoaDon,
-    updateHoaDon
+    updateHoaDon,
+    updateSoLuong
 } from '../../service/BanHangService';
 import ProductModal from './ProductModal';
 
@@ -233,6 +234,80 @@ const BanHang = () => {
         }
     };
 
+    const handleUpdateQuantity = async (chiTietHoaDonId, newQuantity) => {
+        const updatedChiTietHoaDons = [...chiTietHoaDons]; // Sao chép mảng chi tiết hóa đơn
+        const existingDetailIndex = updatedChiTietHoaDons.findIndex(detail => detail.id === chiTietHoaDonId);
+
+        if (existingDetailIndex === -1) {
+            console.error('Không tìm thấy chi tiết hóa đơn');
+            return;
+        }
+
+        const chiTietHoaDon = updatedChiTietHoaDons[existingDetailIndex];
+        // console.log("so luong ton: " + chiTietHoaDon?.chiTietSanPham?.soLuongTon);
+
+        const oldQuantity = chiTietHoaDon.soLuongMua;
+
+        // Kiểm tra nếu số lượng yêu cầu vượt quá số lượng tồn kho
+        if (newQuantity > chiTietHoaDon.soLuongTon) {
+            alert('Số lượng yêu cầu vượt quá số lượng tồn kho');
+            return;
+        }
+
+        // Kiểm tra nếu số lượng tồn kho là 0, không cho phép tăng số lượng
+        if (chiTietHoaDon.soLuongTon === 0 && newQuantity > oldQuantity) {
+            alert('Số lượng tồn kho hiện tại là 0, không thể tăng số lượng!');
+            return;
+        }
+        console.log("a:" + chiTietHoaDon.soLuongTon);
+
+
+        // Cập nhật số lượng và tính lại thành tiền
+        chiTietHoaDon.soLuongMua = newQuantity;
+        chiTietHoaDon.thanhTien = chiTietHoaDon.soLuongMua * chiTietHoaDon.donGia;
+
+        // Cập nhật lại số lượng tồn kho
+        chiTietHoaDon.soLuongTon -= (newQuantity - oldQuantity);
+
+        // Cập nhật lại danh sách chi tiết hóa đơn trong state
+        setChiTietHoaDons(updatedChiTietHoaDons);
+
+        try {
+            // Gửi yêu cầu cập nhật số lượng mới lên server
+            await updateSoLuong(chiTietHoaDonId, newQuantity);
+
+            // Lấy lại danh sách chi tiết hóa đơn của hóa đơn hiện tại
+            const hoaDonId = hoaDons[selectedHoaDonIndex].id;
+            const response = await listChiTietHoaDonByHoaDonId(hoaDonId);
+            setChiTietHoaDons(response.data);
+
+            // Tính toán tổng tiền mới cho hóa đơn
+            const totalAmount = response.data.reduce((total, item) => total + item.thanhTien, 0);
+
+            // Cập nhật tổng tiền của hóa đơn
+            const updatedHoaDons = hoaDons.map(hoaDon =>
+                hoaDon.id === hoaDonId ? { ...hoaDon, tongTien: totalAmount } : hoaDon
+            );
+
+            setHoaDons(updatedHoaDons);
+            localStorage.setItem('hoaDons', JSON.stringify(updatedHoaDons));
+
+        } catch (error) {
+            console.error('Lỗi khi cập nhật số lượng:', error);
+        }
+    };
+
+    const handleQuantityChange = (chiTietHoaDonId, e) => {
+        const newQuantity = parseInt(e.target.value, 10);
+        if (isNaN(newQuantity) || newQuantity <= 0) {
+            alert('Số lượng phải là một số lớn hơn 0');
+            return;
+        }
+        handleUpdateQuantity(chiTietHoaDonId, newQuantity);
+    };
+
+
+
     return (
         <div className='container mb-3'>
             <h5>Bán hàng</h5>
@@ -303,13 +378,22 @@ const BanHang = () => {
                                                 return (
                                                     <tr key={index}>
                                                         <td>{chiTiet.tenChiTietSanPham}</td>
-                                                        <td>{chiTiet.soLuongMua}</td>
+                                                        <td>
+                                                            <input
+                                                                className='form-control form-control-sm'
+                                                                type="number"
+                                                                value={chiTiet.soLuongMua}
+                                                                onChange={(e) => handleQuantityChange(chiTiet.id, e)}
+                                                                min="1"
+                                                                style={{ width: '55px' }}
+                                                            />
+                                                        </td>
                                                         <td>{chiTiet.gia} VNĐ</td>
                                                         <td>{thanhTien} VNĐ</td>
                                                         <td>
                                                             <button
                                                                 className="btn btn-outline-danger btn-sm"
-                                                                onClick={() => handleDeleteProduct(chiTiet.id)} // Hàm xóa
+                                                                onClick={() => handleDeleteProduct(chiTiet.id)}
                                                             >
                                                                 <i className='bi bi-trash'></i>
                                                             </button>
@@ -372,7 +456,7 @@ const BanHang = () => {
                                 </table>
                                 {chiTietHoaDons.length > 0 && (
                                     <div className="d-flex justify-content-center">
-                                        <button className="btn btn-outline-success me-3" style={{width: "100%"}} onClick={handleThanhToan}>Thanh toán</button>
+                                        <button className="btn btn-outline-success me-3" style={{ width: "100%" }} onClick={handleThanhToan}>Thanh toán</button>
                                     </div>
                                 )}
                             </div>

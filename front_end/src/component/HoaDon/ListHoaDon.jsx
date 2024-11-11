@@ -30,6 +30,7 @@ const HoaDonList = () => {
           <table className="table table-hover">
             <thead>
               <tr>
+                <th>ID</th>
                 <th>Mã hóa đơn</th>
                 <th>Tên khách hàng</th>
                 <th>Tên nhân viên</th>
@@ -41,6 +42,7 @@ const HoaDonList = () => {
             <tbody>
               {hoaDon.map(item =>
                 <tr key={item.id}>
+                  <td>{item.id}</td>
                   <td>{item.maHoaDon}</td>
                   <td>{item.tenKhachHang}</td>
                   <td>{item.tenNhanVien}</td>

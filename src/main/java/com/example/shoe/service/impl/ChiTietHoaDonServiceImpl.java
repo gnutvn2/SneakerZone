@@ -100,5 +100,52 @@ public class ChiTietHoaDonServiceImpl implements ChiTietHoaDonService {
         chiTietHoaDonRepository.delete(chiTietHoaDon);
     }
 
+    @Override
+    public ChiTietHoaDonResponse updateSoLuong(Integer chiTietHoaDonId, Integer soLuongMua) {
+        // Lấy chi tiết hóa đơn cần cập nhật
+        ChiTietHoaDon chiTietHoaDon = chiTietHoaDonRepository.findById(chiTietHoaDonId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy chi tiết hóa đơn với ID: " + chiTietHoaDonId));
+
+        // Lấy chi tiết sản phẩm và số lượng tồn kho
+        ChiTietSanPham chiTietSanPham = chiTietHoaDon.getChiTietSanPham();
+        int soLuongTon = chiTietSanPham.getSoLuongTon();
+
+        int soLuongHienTai = chiTietHoaDon.getSoLuongMua();
+        int soLuongThayDoi = soLuongMua - soLuongHienTai;
+
+        if (soLuongThayDoi > soLuongTon) {
+            throw new RuntimeException("Số lượng mua vượt quá số lượng tồn kho");
+        }
+        // Kiểm tra điều kiện số lượng hợp lệ
+        if (soLuongMua < 1) {
+            throw new RuntimeException("Số lượng mua phải lớn hơn hoặc bằng 1");
+        }
+        // Cập nhật số lượng tồn kho của sản phẩm
+        chiTietSanPham.setSoLuongTon(soLuongTon - soLuongThayDoi);
+        chiTietSanPhamRepository.save(chiTietSanPham);
+
+        // Cập nhật chi tiết hóa đơn với số lượng mới và tính lại thành tiền
+        chiTietHoaDon.setSoLuongMua(soLuongMua);
+        chiTietHoaDon.setTongTien(soLuongMua * chiTietHoaDon.getGia());
+
+        // Lưu lại chi tiết hóa đơn đã cập nhật
+        ChiTietHoaDon updateChiTiet = chiTietHoaDonRepository.save(chiTietHoaDon);
+
+        // Tính lại tổng tiền của hóa đơn
+        HoaDon hoaDon = chiTietHoaDon.getHoaDon();  // Lấy hóa đơn từ chi tiết hóa đơn
+        double tongTienHoaDon = hoaDon.getChiTietHoaDons().stream()
+                .mapToDouble(ChiTietHoaDon::getTongTien)
+                .sum();
+
+        // Cập nhật tổng tiền cho hóa đơn
+        hoaDon.setTongTien(tongTienHoaDon);
+        hoaDonRepository.save(hoaDon);  // Lưu lại hóa đơn với tổng tiền mới
+
+        // Trả về kết quả cập nhật chi tiết hóa đơn
+        return shoeMapper.toChiTietHoaDonResponse(updateChiTiet);
+    }
+
+
+
 
 }

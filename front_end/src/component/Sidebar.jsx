@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import '../assets/Sidebar.css';
-import logo from '../assets/img/logoSneakZone.png'
+import logo from '../assets/img/s.png'
 
 const Sidebar = () => {
   const [activeSubmenu, setActiveSubmenu] = useState(null);

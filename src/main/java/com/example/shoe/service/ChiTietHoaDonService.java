@@ -9,4 +9,5 @@ public interface ChiTietHoaDonService {
     List<ChiTietHoaDonResponse> getAllChiTietHoaDonByHoaDonId(Integer hoaDonId);
     ChiTietHoaDonResponse createChiTietHoaDon(ChiTietHoaDonRequest request);
     void deleteChiTietHoaDon(Integer chiTietHoaDonId);
+    ChiTietHoaDonResponse updateSoLuong(Integer chiTietHoaDonId, Integer soLuongMua);
 }

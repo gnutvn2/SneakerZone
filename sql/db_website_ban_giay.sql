@@ -53,7 +53,7 @@ create table san_pham(
 	id int identity(1,1) primary key,
 	ma_san_pham varchar(30) unique not null,
 	ten_san_pham nvarchar(100) not null,
-	mo_ta text,
+	mo_ta nvarchar(255),
 	trang_thai bit default 1 not null,
 	ngay_tao date not null,
 	thuong_hieu_id int not null,
@@ -143,3 +143,76 @@ create table chi_tiet_hoa_don (
 	foreign key (chi_tiet_san_pham_id) references chi_tiet_san_pham(id),
 	foreign key (hoa_don_id) references hoa_don(id)
 );
+
+-- Thêm dữ liệu cho bảng vai trò
+insert into vai_tro (ma_vai_tro, ten_vai_tro) 
+values ('NV', N'Nhân viên'), 
+       ('QL', N'Quản lý');
+
+-- Thêm dữ liệu cho bảng nhân viên
+insert into nhan_vien (ma_nhan_vien, ho_ten, gioi_tinh, so_dien_thoai, email, mat_khau, dia_chi, trang_thai, vai_tro_id)
+values 
+('NV1', N'Nguyễn Văn Tùng', 1, '0869225083', 'tungnv@gmail.com', 'qwerty', 'Hà Nội', 1, 1),
+('NV2', N'Đinh Diệu Linh', 0, '0967378765', 'linhdd@gmail.com', 'adfghj', 'Hà Nội', 1, 2);
+
+-- Thêm dữ liệu cho bảng đế giày
+insert into de_giay (ma_de_giay, ten_de_giay)
+values
+('DG001', N'Đế cao su'),
+('DG002', N'Đế da tổng hợp'),
+('DG003', N'Đế EVA'),
+('DG004', N'Đế PU'),
+('DG005', N'Đế cao su non');
+
+-- Thêm dữ liệu cho bảng size
+insert into size (ma_size, ten_size)
+values
+('S01', N'36'),
+('S02', N'37'),
+('S03', N'38'),
+('S04', N'39'),
+('S05', N'40'),
+('S06', N'41'),
+('S07', N'42');
+
+-- Thêm dữ liệu cho bảng chất liệu
+insert into chat_lieu (ma_chat_lieu, ten_chat_lieu)
+values
+('CL01', N'Da thật'),
+('CL02', N'Vải'),
+('CL03', N'Cao su'),
+('CL04', N'Nhựa'),
+('CL05', N'Vải lưới'),
+('CL06', N'Da tổng hợp');
+
+-- Thêm dữ liệu cho bảng màu sắc
+insert into mau_sac (ma_mau_sac, ten_mau_sac)
+values
+('MS01', N'Đỏ'),
+('MS02', N'Xanh dương'),
+('MS03', N'Xanh lá cây'),
+('MS04', N'Vàng'),
+('MS05', N'Đen'),
+('MS06', N'Trắng'),
+('MS07', N'Nâu'),
+('MS08', N'Be'),
+('MS09', N'Hồng'),
+('MS10', N'Tím');
+
+-- Thêm dữ liệu cho bảng thương hiệu
+insert into thuong_hieu (ma_thuong_hieu, ten_thuong_hieu)
+values
+('TH01', N'Nike'),
+('TH02', N'Adidas');
+
+-- Thêm dữ liệu cho bảng danh mục
+insert into danh_muc (ma_danh_muc, ten_danh_muc)
+values
+('DM01', N'Giày cổ thấp'),
+('DM02', N'Giày cổ cao');
+
+-- Thêm dữ liệu sản phẩm cho Nike
+insert into san_pham (ma_san_pham, ten_san_pham, mo_ta, trang_thai, ngay_tao, thuong_hieu_id, danh_muc_id)
+values
+('SP01', N'Air Force 1', N'Một trong những đôi giày thể thao huyền thoại của Nike, thiết kế cổ thấp, phong cách thời trang.', 1, GETDATE(), 1, 1), 
+('SP02', N'Jordan', N'Giày bóng rổ Nike Air Jordan nổi tiếng với thiết kế cổ cao, mang đậm phong cách thể thao và thời trang.', 1, GETDATE(), 1, 2);

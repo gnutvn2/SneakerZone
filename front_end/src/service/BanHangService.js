@@ -29,6 +29,18 @@ export const createChiTietHoaDon = (hoaDonId, chiTietHoaDon) => {
     return axios.post(`${apiChiTietHoaDon}/hoa-don/${hoaDonId}`, chiTietHoaDon);
 };
 
+export const updateSoLuong = (chiTietHoaDonId, soLuongMua) => {
+    return axios.put(`${apiChiTietHoaDon}/update-so-luong/${chiTietHoaDonId}`, 
+        soLuongMua, 
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+    );
+};
+
+
 export const deleteChiTietHoaDon = (chiTietHoaDonId) => {
     return axios.delete(`${apiChiTietHoaDon}/${chiTietHoaDonId}`);
 };

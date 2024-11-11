@@ -12,5 +12,6 @@ export const listHoaDonDaThanhToan = (pageable) => {
     });
 }
 
-
-
+export const getHoaDonDetail = (hoaDonId) => {
+    return axios.get(`${apiHoaDon}/${hoaDonId}`);
+};

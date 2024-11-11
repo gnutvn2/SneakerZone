@@ -1,5 +1,6 @@
 package com.example.shoe.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +27,10 @@ public class ChiTietHoaDon {
     @JoinColumn(name = "chi_tiet_san_pham_id")
     ChiTietSanPham chiTietSanPham;
     @ManyToOne
+    @JsonManagedReference
     @JoinColumn(name = "hoa_don_id")
     HoaDon hoaDon;
+    public void updateTongTien() {
+        this.tongTien = this.gia * this.soLuongMua;
+    }
 }
